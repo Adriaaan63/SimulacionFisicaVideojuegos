@@ -3,6 +3,7 @@
 #include <PxPhysicsAPI.h>
 
 #include <vector>
+#include "Vector3D.h"
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
@@ -30,7 +31,7 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 RenderItem* obj = NULL;
-PxShape* shape;
+
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -46,8 +47,9 @@ void initPhysics(bool interactive)
 	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+
 	PxShape* shape = CreateShape(PxSphereGeometry(5), gMaterial);
-	obj = new RenderItem(shape, new PxTransform(0, 0, 0), Vector4(1, 1, 1, 1));
+	obj = new RenderItem(shape, new PxTransform(Vector3D<float>()), Vector4(1, 1, 1, 1));
 	
 	
 
