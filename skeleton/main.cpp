@@ -32,6 +32,8 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 RenderItem* obj = NULL;
 RenderItem* obj1 = NULL;
+RenderItem* obj2 = NULL;
+RenderItem* obj3 = NULL;
 
 
 // Initialize physics engine
@@ -49,11 +51,21 @@ void initPhysics(bool interactive)
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
-	PxShape* shape = CreateShape(PxSphereGeometry(5), gMaterial);
+	PxShape* shape = CreateShape(PxSphereGeometry(1), gMaterial);
 	obj = new RenderItem(shape, new PxTransform(0, 0, 0), Vector4(1, 1, 1, 1));
 	
-	Vector3D<float> ejeX(10.0f);
-	obj1 = new RenderItem(shape, new PxTransform(0, 0, 0), Vector4(1, 1, 1, 1));
+	float distanceEje = 15.0f;
+	Vector3D<float> ejeX(distanceEje, 0.0f,0.0f);
+	PxShape* shape1 = CreateShape(PxSphereGeometry(1), gMaterial);
+	obj1 = new RenderItem(shape1, new PxTransform(ejeX.x, ejeX.y, ejeX.z), Vector4(1, 0, 0, 1));
+
+	Vector3D<float> ejeY(0.0f, distanceEje, 0.0f);
+	PxShape* shape2 = CreateShape(PxSphereGeometry(1), gMaterial);
+	obj2 = new RenderItem(shape2, new PxTransform(ejeY.x, ejeY.y, ejeY.z), Vector4(0, 1, 0, 1));
+
+	Vector3D<float> ejeZ(0.0f, 0.0, distanceEje);
+	PxShape* shape3 = CreateShape(PxSphereGeometry(1), gMaterial);
+	obj3 = new RenderItem(shape3, new PxTransform(ejeZ.x, ejeZ.y, ejeZ.z), Vector4(0, 0, 1, 1));
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
