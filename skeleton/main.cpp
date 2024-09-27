@@ -8,6 +8,7 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
+#include "Particle.h"
 
 #include <iostream>
 
@@ -34,6 +35,7 @@ RenderItem* obj = NULL;
 RenderItem* obj1 = NULL;
 RenderItem* obj2 = NULL;
 RenderItem* obj3 = NULL;
+Particle* particle;
 
 
 // Initialize physics engine
@@ -67,6 +69,11 @@ void initPhysics(bool interactive)
 	PxShape* shape3 = CreateShape(PxSphereGeometry(1), gMaterial);
 	obj3 = new RenderItem(shape3, new PxTransform(ejeZ.x, ejeZ.y, ejeZ.z), Vector4(0, 0, 1, 1));
 
+	particle = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0));
+	PxShape* shape4 = CreateShape(PxSphereGeometry(1.5), gMaterial);
+	particle->setRenderItem(new RenderItem(shape4, &particle->getPose(), Vector4(1, 1, 0, 1)));
+	
+
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
@@ -87,6 +94,9 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
+	particle->integrate(t);
+	
 }
 
 // Function to clean data
@@ -105,7 +115,13 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
+	
+	if (particle != nullptr) {
+		delete particle;  // Esto también llama al destructor de Particle, que debe liberar el RenderItem.
+		particle = nullptr;
 	}
+
+}
 
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
