@@ -4,7 +4,7 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc);
 	~Particle();
 
 	void integrate(double t);
@@ -14,8 +14,13 @@ public:
 
 	physx::PxTransform getPose() const { return pose; };
 
+	void Particle::setAcceleration(const Vector3& newAcc) {
+		acc = newAcc;
+	}
+
 private:
 	Vector3 vel;
+	Vector3 acc;
 	physx::PxTransform pose; //A render item le pasaremos la direccion de este pose, para que se actualice automaticamente
 	RenderItem* renderItem;
 };
