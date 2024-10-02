@@ -4,7 +4,7 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, double damping);
 	~Particle();
 
 	void integrate(double t);
@@ -23,5 +23,6 @@ private:
 	Vector3 acc;
 	physx::PxTransform pose; //A render item le pasaremos la direccion de este pose, para que se actualice automaticamente
 	RenderItem* renderItem;
+	double damping;
 };
 

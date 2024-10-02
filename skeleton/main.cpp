@@ -69,9 +69,7 @@ void initPhysics(bool interactive)
 	PxShape* shape3 = CreateShape(PxSphereGeometry(1), gMaterial);
 	obj3 = new RenderItem(shape3, new PxTransform(ejeZ.x, ejeZ.y, ejeZ.z), Vector4(0, 0, 1, 1));
 
-	particle = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0,5,0));
-	PxShape* shape4 = CreateShape(PxSphereGeometry(1.5), gMaterial);
-	particle->setRenderItem(new RenderItem(shape4, &particle->getPose(), Vector4(1, 1, 0, 1)));
+	particle = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0,5,0), 0.99);
 	
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
