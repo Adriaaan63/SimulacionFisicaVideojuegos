@@ -41,6 +41,7 @@ public:
 	{
 		return Vector3D(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 	}
+
 	 T magnitudeSquared() const
 	{
 		return x * x + y * y + z * z;

@@ -9,7 +9,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
-
+#include <vector>
 #include <iostream>
 
 std::string display_text = "This is a test";
@@ -36,6 +36,7 @@ RenderItem* obj1 = NULL;
 RenderItem* obj2 = NULL;
 RenderItem* obj3 = NULL;
 Particle* particle;
+std::vector<Particle*> proyectiles;
 
 
 // Initialize physics engine
@@ -69,7 +70,7 @@ void initPhysics(bool interactive)
 	PxShape* shape3 = CreateShape(PxSphereGeometry(1), gMaterial);
 	obj3 = new RenderItem(shape3, new PxTransform(ejeZ.x, ejeZ.y, ejeZ.z), Vector4(0, 0, 1, 1));
 
-	particle = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0,5,0), 0.99);
+	/*particle = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0,5,0), 0.99);*/
 	
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
@@ -140,6 +141,8 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '4':  // Aceleración hacia la derecha
 		particle->setAcceleration(Vector3(10, 0, 0));
 		break;
+	case 'e':
+
 	default:
 		break;
 	}
