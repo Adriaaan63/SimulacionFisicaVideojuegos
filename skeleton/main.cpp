@@ -11,6 +11,7 @@
 #include "Particle.h"
 #include <vector>
 #include <iostream>
+#include "Proyectil.h"
 
 std::string display_text = "This is a test";
 
@@ -94,7 +95,10 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	particle->integrate(t);
+	/*particle->integrate(t);*/
+	for (auto& e : proyectiles) {
+		e->integrate(t);
+	}
 	
 }
 
@@ -115,11 +119,14 @@ void cleanupPhysics(bool interactive)
 	
 	gFoundation->release();
 	
-	if (particle != nullptr) {
-		delete particle;  // Esto también llama al destructor de Particle, que debe liberar el RenderItem.
-		particle = nullptr;
+	//if (particle != nullptr) {
+	//	delete particle;  // Esto también llama al destructor de Particle, que debe liberar el RenderItem.
+	//	particle = nullptr;
+	//}
+	for (auto& e : proyectiles) {
+		delete e;
 	}
-
+	proyectiles.clear();
 }
 
 // Function called when a key is pressed
@@ -129,19 +136,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case '1':  // Aceleración hacia arriba
-		particle->setAcceleration(Vector3(0, 10, 0));
+	case 'P':
+		proyectiles.push_back(new Proyectil(GetCamera()->getTransform().p, GetCamera()->getDir() * 15, physx::PxVec3(0, 0, 0), 20, physx::PxVec3(0, 0, 250)));
 		break;
-	case '2':  // Aceleración hacia abajo
-		particle->setAcceleration(Vector3(0, -10, 0));
-		break;
-	case '3':  // Aceleración hacia la izquierda
-		particle->setAcceleration(Vector3(-10, 0, 0));
-		break;
-	case '4':  // Aceleración hacia la derecha
-		particle->setAcceleration(Vector3(10, 0, 0));
-		break;
-	case 'e':
 
 	default:
 		break;

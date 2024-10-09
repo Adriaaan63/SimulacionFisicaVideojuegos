@@ -10,6 +10,7 @@ public:
 
 	void ajustarMasa();
 	void ajustarGravedad(float gravedad);
+	virtual void integrate(double t);
 private:
 	physx::PxVec3 vr;
 	float ms, mr, gs;
