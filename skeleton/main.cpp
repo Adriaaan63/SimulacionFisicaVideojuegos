@@ -137,7 +137,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'P':
-		proyectiles.push_back(new Proyectil(GetCamera()->getTransform().p, GetCamera()->getDir() * 15, physx::PxVec3(0, 0, 0), 20, physx::PxVec3(0, 0, 250)));
+		proyectiles.push_back(new Proyectil(GetCamera()->getTransform().p, GetCamera()->getDir() * 50, physx::PxVec3(0, 0, 0), 20, physx::PxVec3(0, 0, 1000)));
 		break;
 
 	default:
