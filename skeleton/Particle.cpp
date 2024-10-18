@@ -1,6 +1,6 @@
 #include "Particle.h"
 
-Particle::Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, double Damping):vel(Vel), pose(Pos), acc(Acc), damping(Damping) {
+Particle::Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, double Damping):vel(Vel), pose(Pos), acc(Acc), damping(Damping), initialPos(pose), radius(0) {
 	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(0.1)), &pose, Vector4(1, 1, 0, 1));
 	
 }
@@ -12,8 +12,12 @@ Particle::~Particle(){
 	}
 }
 void Particle::integrate(double t) {
+	pose.p += vel * t;
 	vel += acc * t;
 	vel *= pow(damping, t);
-	pose.p += vel * t;
+}
 
+bool Particle::isOutOfArea() const {
+	float distance = (pose.p - initialPos.p).magnitude();  
+	return distance > radius;
 }

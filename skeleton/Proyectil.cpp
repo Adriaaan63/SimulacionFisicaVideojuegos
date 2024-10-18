@@ -6,6 +6,7 @@ Proyectil::Proyectil(physx::PxVec3 Pos, physx::PxVec3 VelS, physx::PxVec3 Acc, f
 	ms(0),gs(0) {
 	ajustarMasa();
 	ajustarGravedad(9.8f);
+	
 }
 Proyectil::~Proyectil() {
 

@@ -2,7 +2,6 @@
 #include <list>
 #include "Particle.h"
 #include "ParticleGenerator.h"
-
 class ParticleSystem
 {
 protected:
@@ -13,5 +12,8 @@ public:
 	~ParticleSystem();
 
 	virtual void update(double t);
+	void createGenerator(ParticleGenerator* g) {
+		generators.push_back(g);
+	}
 };
 

@@ -12,6 +12,8 @@
 #include <vector>
 #include <iostream>
 #include "Proyectil.h"
+#include "ParticleSystem.h"
+#include "NormalGenerator.h"
 
 std::string display_text = "This is a test";
 
@@ -36,8 +38,8 @@ RenderItem* obj = NULL;
 RenderItem* obj1 = NULL;
 RenderItem* obj2 = NULL;
 RenderItem* obj3 = NULL;
-Particle* particle;
 std::vector<Particle*> proyectiles;
+ParticleSystem* ParticleSys;
 
 
 // Initialize physics engine
@@ -82,6 +84,9 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
+	ParticleSys = new ParticleSystem();
+	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 100));
 	}
 
 
@@ -99,7 +104,7 @@ void stepPhysics(bool interactive, double t)
 	for (auto& e : proyectiles) {
 		e->integrate(t);
 	}
-	
+	ParticleSys->update(t);
 }
 
 // Function to clean data

@@ -13,10 +13,20 @@ ParticleSystem::~ParticleSystem() {
 	generators.clear();
 }
 void ParticleSystem::update(double t) {
-	for (auto& p : particles) {
+	for (auto it = particles.begin(); it != particles.end(); ) {
+		Particle* p = *it;
 		p->integrate(t);
 
-		//Matar particulas por tiempo y si sale de la posicion
-
+		// Verificar si la partícula sale del área circular
+		if (p->isOutOfArea()) {
+			delete p;
+			it = particles.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+	for (auto& g : generators) {
+		particles.push_back(g->generateParticle());
 	}
 }
