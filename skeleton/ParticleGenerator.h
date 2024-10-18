@@ -11,6 +11,7 @@ public:
 
 	virtual Particle* generateParticle() = 0;
 protected:
+	std::mt19937 random_engine;
 	physx::PxVec3 pos;
 	Particle* particleModel; 
 };

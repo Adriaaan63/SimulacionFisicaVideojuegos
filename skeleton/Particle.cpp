@@ -4,6 +4,9 @@ Particle::Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, doub
 	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(0.1)), &pose, Vector4(1, 1, 0, 1));
 	
 }
+Particle::Particle(Particle* modelParticle) : pose(modelParticle->pose), acc(modelParticle->acc), damping(modelParticle->damping), initialPos(modelParticle->initialPos), radius(0) {
+	renderItem = modelParticle->renderItem;
+}
 Particle::~Particle(){
 	if (renderItem != nullptr) {
 		DeregisterRenderItem(renderItem);

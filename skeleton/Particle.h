@@ -7,6 +7,7 @@ class Particle
 {
 public:
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, double damping);
+	Particle(Particle* modelParticle);
 	virtual ~Particle();
 
 	virtual void integrate(double t);
@@ -28,6 +29,8 @@ public:
 
 	void setRadius(float newradius) { radius = newradius; };
 	float getradius() const { return radius; };
+	physx::PxVec3 getAcc() const { return acc; };
+	double getDamping() const { return damping; };
 protected:
 	physx::PxVec3 vel;
 	physx::PxVec3 acc;
