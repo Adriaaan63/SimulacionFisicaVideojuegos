@@ -15,5 +15,7 @@ public:
 	void createGenerator(ParticleGenerator* g) {
 		generators.push_back(g);
 	}
+	std::list<Particle*> getListPart() const { return particles; };
+	void addParticle(Particle* p);
 };
 

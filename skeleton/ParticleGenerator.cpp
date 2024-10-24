@@ -1,7 +1,12 @@
 #include "ParticleGenerator.h"
-ParticleGenerator::ParticleGenerator(physx::PxVec3 pos) : pos(pos), particleModel(new Particle(pos,Vector3(0,40,0),Vector3(0,-GRAVITY,0),0.99)) {
-
+#include "ParticleSystem.h"
+ParticleGenerator::ParticleGenerator(physx::PxVec3 pos) : pos(pos) {
+	particleModel = new Particle(pos, physx::PxVec3(0, 0, 0), physx::PxVec3(0, -9.8, 0));
 }
 ParticleGenerator::~ParticleGenerator(){
+
+}
+void ParticleGenerator::update(double t, ParticleSystem* prSys) {
+	prSys->addParticle(generateParticle());
 
 }

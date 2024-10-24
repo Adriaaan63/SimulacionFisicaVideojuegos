@@ -86,7 +86,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	ParticleSys = new ParticleSystem();
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 100, physx::PxVec3(10, 0.0001, 10)));
+	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 100));
 	}
 
 
@@ -100,11 +100,12 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	/*particle->integrate(t);*/
-	for (auto& e : proyectiles) {
-		e->integrate(t);
-	}
+	///*particle->integrate(t);*/
+	//for (auto& e : proyectiles) {
+	//	e->integrate(t);
+	//}
 	ParticleSys->update(t);
+	
 }
 
 // Function to clean data
@@ -128,10 +129,10 @@ void cleanupPhysics(bool interactive)
 	//	delete particle;  // Esto también llama al destructor de Particle, que debe liberar el RenderItem.
 	//	particle = nullptr;
 	//}
-	for (auto& e : proyectiles) {
+	/*for (auto& e : proyectiles) {
 		delete e;
 	}
-	proyectiles.clear();
+	proyectiles.clear();*/
 }
 
 // Function called when a key is pressed
