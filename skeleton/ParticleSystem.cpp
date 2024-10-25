@@ -16,22 +16,19 @@ void ParticleSystem::update(double t) {
 	for (auto g : generators) {
 		g->update(t, this);
 	}
-	for (auto e : particles) {
-		e->integrate(t);
+	auto it = particles.begin();
+	while (it != particles.end()) {
+		if ((*it)->isAlive()) {
+			(*it)->integrate(t);
+			++it;
+		}
+		else {
+			auto aux = it;
+			++it;
+			delete *aux;
+			particles.erase(aux);
+		}
 	}
-	//for (auto it = particles.begin(); it != particles.end();++it ) {
-	//	// Verificar si la partícula sale del área circular
-	//	/*if ((*it)->isOutOfArea()) {
-	//		delete* it;
-	//		auto aux = it;
-	//		++aux;
-	//		particles.erase(it);
-	//		it = aux;
-	//	}
-	//	else*/
-	//	(*it)->integrate(t);
-	//	
-	//}
 	
 }
 void ParticleSystem::addParticle(Particle* p) {

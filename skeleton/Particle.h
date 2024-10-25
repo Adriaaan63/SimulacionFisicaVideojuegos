@@ -9,6 +9,7 @@ public:
 	Particle() {};
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, double damping);
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 acc = { 0,0,0 });
+	Particle(Particle& const p);
 	virtual ~Particle();
 
 	virtual void integrate(double t);
@@ -18,6 +19,7 @@ public:
 
 	physx::PxTransform getPose() const { return pose; };
 	void setPose(physx::PxTransform newPose) { pose= newPose; };
+	void setInitalPose(physx::PxTransform newInitialPose) { initialPos= newInitialPose; };
 
 	void Particle::setAcceleration(const physx::PxVec3& newAcc) {
 		acc = newAcc;
@@ -27,10 +29,14 @@ public:
 		vel = newVel; 
 	}
 
-	bool isOutOfArea() const;
+	bool isAlive();
 
 	void setRadius(float newradius) { radius = newradius; };
 	float getradius() const { return radius; };
+
+	void setTimeLife(float newtimeLife) { timeLife = newtimeLife; };
+	float getTimeLife() const { return timeLife; };
+
 	physx::PxVec3 getAcc() const { return acc; };
 	double getDamping() const { return damping; };
 	void setDamping(double damp) { damping = damp; };
@@ -42,5 +48,6 @@ protected:
 	double damping;
 	physx::PxTransform initialPos;
 	float radius;
+	float timeLife;
 };
 

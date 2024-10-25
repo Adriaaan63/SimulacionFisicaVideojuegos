@@ -86,7 +86,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	ParticleSys = new ParticleSystem();
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 100));
+	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 30, 5));
 	}
 
 

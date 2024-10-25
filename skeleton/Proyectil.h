@@ -1,6 +1,4 @@
 #pragma once
-#include "core.hpp"
-#include "RenderUtils.hpp"
 #include "Particle.h"
 class Proyectil: public Particle
 {

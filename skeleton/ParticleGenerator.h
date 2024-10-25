@@ -14,6 +14,6 @@ public:
 	virtual Particle* generateParticle() = 0;
 protected:
 	physx::PxVec3 pos;
-	Particle* particleModel; 
+	
 };
 
