@@ -40,11 +40,24 @@ public:
 	physx::PxVec3 getAcc() const { return acc; };
 	double getDamping() const { return damping; };
 	void setDamping(double damp) { damping = damp; };
+	void createRenderItem();
+	Particle& operator=(const Particle& p) {
+		pose = p.pose;
+		vel = p.vel;
+		acc = p.acc;
+		damping = p.damping;
+		initialPos = p.initialPos;
+		radius = p.radius;
+		timeLife = p.timeLife;
+		createRenderItem();
+		
+		return *this;
+	}
 protected:
 	physx::PxVec3 vel;
 	physx::PxVec3 acc;
 	physx::PxTransform pose; //A render item le pasaremos la direccion de este pose, para que se actualice automaticamente
-	RenderItem* renderItem = nullptr;
+	RenderItem* renderItem;
 	double damping;
 	physx::PxTransform initialPos;
 	float radius;

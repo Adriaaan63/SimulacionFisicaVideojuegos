@@ -14,6 +14,7 @@
 #include "Proyectil.h"
 #include "ParticleSystem.h"
 #include "NormalGenerator.h"
+#include "UniformGenerator.h"
 
 std::string display_text = "This is a test";
 
@@ -86,7 +87,8 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	ParticleSys = new ParticleSystem();
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 30, 5));
+	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 100, 5, 20, 20));
+	//ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(0, 0, 0), 100, 5));
 	}
 
 
