@@ -87,7 +87,9 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	ParticleSys = new ParticleSystem();
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 100, 5, 20, 20));
+	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 30, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)));
+	ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(50, 0, 0), 30, 5, 0, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(10, 10, 10)));
+	ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(-50, 0, 0), 30, 5, 20, 20, physx::PxVec3(-50, -50, -50), physx::PxVec3(50, 50, 50)));
 	//ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(0, 0, 0), 100, 5));
 	}
 
@@ -102,10 +104,10 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	///*particle->integrate(t);*/
-	//for (auto& e : proyectiles) {
-	//	e->integrate(t);
-	//}
+	/*particle->integrate(t);*/
+	for (auto& e : proyectiles) {
+		e->integrate(t);
+	}
 	ParticleSys->update(t);
 	
 }

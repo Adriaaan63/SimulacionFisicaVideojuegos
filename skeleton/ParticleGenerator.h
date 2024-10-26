@@ -7,7 +7,7 @@ const float GRAVITY = -9.8f;
 class ParticleGenerator
 {
 public:
-	ParticleGenerator(physx::PxVec3 pos);
+	ParticleGenerator(physx::PxVec3 pos, float posMax, float posMin);
 	virtual ~ParticleGenerator();
 
 	void update(double t, ParticleSystem* prSys);
@@ -18,8 +18,11 @@ public:
 	void setModel(Particle newParticleModel) {
 		particleModel = newParticleModel;
 	}
+	physx::PxVec3 calculatePosicion();
 protected:
 	physx::PxVec3 pos;
 	Particle particleModel;
+	float posMax;
+	float posMin;
 };
 

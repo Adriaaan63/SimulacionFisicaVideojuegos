@@ -1,20 +1,16 @@
 #include "NormalGenerator.h"
-NormalGenerator::NormalGenerator(physx::PxVec3 pos, float radius, float timeLifeParticle, float posMax, float posMin) :
-	ParticleGenerator(pos), 
+NormalGenerator::NormalGenerator(physx::PxVec3 pos, float radius, float timeLifeParticle, float posMax, float posMin, physx::PxVec3 means, physx::PxVec3 stdDevs) :
+	ParticleGenerator(pos, posMax, posMin), 
 	radius(radius), timeLifeParticle(timeLifeParticle),
-	posMax(posMax), posMin(posMin){
+	means(means), stdDevs(stdDevs){
 	//particleModel = new Particle(pos, physx::PxVec3(0, 0, 0), physx::PxVec3(0, -9.8, 0));
 };
 
 Particle* NormalGenerator::generateParticle() {
-	/*Particle* p = new Particle(pos, physx::PxVec3(generateGausssian(0.0, 2), generateGausssian(20, 2), generateGausssian(0, 2)), Vector3(0, -9.8, 0), 0.99);
-	p->setRadius(radius);
-	p->setTimeLife(timeLifeParticle);
-	return p;*/
 	Particle* p = new Particle(particleModel);
 
-	p->setVel(physx::PxVec3(generateGausssian(0.0, 2), generateGausssian(20, 2), generateGausssian(0, 2)));
-	/*p->setPose(physx::PxTransform(pos));*/
+	p->setVel(physx::PxVec3(generateGausssian(means.x, stdDevs.x), generateGausssian(means.y, stdDevs.y), generateGausssian(means.z, stdDevs.z)));
+	p->setPose(physx::PxTransform(calculatePosicion()));
 	p->setRadius(radius);
 	p->setTimeLife(timeLifeParticle);
 	return p;
