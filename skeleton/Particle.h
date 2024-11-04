@@ -7,8 +7,8 @@ class Particle
 {
 public:
 	Particle() {};
-	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, double damping);
-	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 acc = { 0,0,0 });
+	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, double damping, float mass_, physx::PxVec3 force = { 0,0,0 });
+	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, float mass_, physx::PxVec3 acc = { 0,0,0 }, physx::PxVec3 force = { 0,0,0 });
 	Particle(Particle& const p);
 	virtual ~Particle();
 
@@ -38,8 +38,18 @@ public:
 	float getTimeLife() const { return timeLife; };
 
 	physx::PxVec3 getAcc() const { return acc; };
+
 	double getDamping() const { return damping; };
 	void setDamping(double damp) { damping = damp; };
+
+	float getMass() const { return mass; }
+	void setMass(float newMass) { mass = newMass; }
+
+	// Métodos de fuerza
+	void setForce(physx::PxVec3 newforce) {
+		force = newforce;
+	}
+
 	void createRenderItem();
 	Particle& operator=(const Particle& p) {
 		pose = p.pose;
@@ -49,6 +59,8 @@ public:
 		initialPos = p.initialPos;
 		radius = p.radius;
 		timeLife = p.timeLife;
+		mass = p.mass;
+		force = p.force;
 		createRenderItem();
 		
 		return *this;
@@ -56,11 +68,13 @@ public:
 protected:
 	physx::PxVec3 vel;
 	physx::PxVec3 acc;
+	physx::PxVec3 force;
 	physx::PxTransform pose; //A render item le pasaremos la direccion de este pose, para que se actualice automaticamente
 	RenderItem* renderItem;
 	double damping;
 	physx::PxTransform initialPos;
 	float radius;
 	float timeLife;
+	float mass;
 };
 

@@ -11,6 +11,10 @@ ParticleSystem::~ParticleSystem() {
 		delete g;
 	}
 	generators.clear();
+	for (auto fg : forceGenerators) {
+		delete fg;
+	}
+	forceGenerators.clear();
 }
 void ParticleSystem::update(double t) {
 	for (auto g : generators) {
@@ -19,6 +23,7 @@ void ParticleSystem::update(double t) {
 	auto it = particles.begin();
 	while (it != particles.end()) {
 		if ((*it)->isAlive()) {
+			applyForces(*it);
 			(*it)->integrate(t);
 			++it;
 		}
@@ -33,4 +38,12 @@ void ParticleSystem::update(double t) {
 }
 void ParticleSystem::addParticle(Particle* p) {
 	particles.push_back(p);
+}
+
+void ParticleSystem::applyForces(Particle* p) {
+	physx::PxVec3 totalForce(0, 0, 0);
+	for (auto g : forceGenerators) {
+		totalForce += g->calculateForce(p);
+	}
+	p->setForce(totalForce);
 }

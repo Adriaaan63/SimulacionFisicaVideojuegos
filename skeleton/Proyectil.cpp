@@ -1,6 +1,6 @@
 #include "Proyectil.h"
 Proyectil::Proyectil(physx::PxVec3 Pos, physx::PxVec3 VelS, physx::PxVec3 Acc, float masaR, physx::PxVec3 VelR):
-	Particle(Pos, VelS, Acc, 0.99),
+	Particle(Pos, VelS, Acc, 0.99,0),
 	mr(masaR),
 	vr(VelR), 
 	ms(0),gs(0) {
