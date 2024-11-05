@@ -7,8 +7,8 @@ class Particle
 {
 public:
 	Particle() {};
-	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, physx::PxVec3 Acc, double damping, float mass_, physx::PxVec3 force = { 0,0,0 });
-	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, float mass_, physx::PxVec3 acc = { 0,0,0 }, physx::PxVec3 force = { 0,0,0 });
+	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel,Vector4 color, physx::PxVec3 Acc, double damping, float mass_, physx::PxVec3 force = { 0,0,0 });
+	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel,Vector4 color, float mass_, physx::PxVec3 acc = { 0,0,0 }, physx::PxVec3 force = { 0,0,0 });
 	Particle(Particle& const p);
 	virtual ~Particle();
 
@@ -61,6 +61,7 @@ public:
 		timeLife = p.timeLife;
 		mass = p.mass;
 		force = p.force;
+		color = p.color;
 		createRenderItem();
 		
 		return *this;
@@ -69,6 +70,7 @@ protected:
 	physx::PxVec3 vel;
 	physx::PxVec3 acc;
 	physx::PxVec3 force;
+	Vector4 color;
 	physx::PxTransform pose; //A render item le pasaremos la direccion de este pose, para que se actualice automaticamente
 	RenderItem* renderItem;
 	double damping;

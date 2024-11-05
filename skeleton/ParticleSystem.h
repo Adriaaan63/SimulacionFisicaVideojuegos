@@ -14,8 +14,8 @@ public:
 	~ParticleSystem();
 
 	virtual void update(double t);
-	void createGenerator(ParticleGenerator* g, float massP) {
-		Particle p = Particle(g->getPose(), physx::PxVec3(0,0,0), massP);
+	void createGenerator(ParticleGenerator* g, float massP, Vector4 colorParticle) {
+		Particle p = Particle(g->getPose(), physx::PxVec3(0,0,0),colorParticle, massP);
 		g->setModel(p);
 		generators.push_back(g);
 	}

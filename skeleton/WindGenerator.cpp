@@ -5,6 +5,7 @@ WindGenerator::WindGenerator(const Vector3& velocidad, float k1, float k2, physx
 physx::PxVec3 WindGenerator::calculateForce(Particle* p) {
     if ((p->getPose().p - centro).magnitude() <= radio) {
         // Aplicar la fuerza de viento solo si está dentro del volumen
+        calculateVel(p);
         return k1 * (velocidad - p->getVel()) + k2 * (velocidad - p->getVel()).magnitude() * (velocidad - p->getVel());
     }
     return physx::PxVec3(0, 0, 0);
