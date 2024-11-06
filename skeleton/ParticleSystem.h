@@ -26,5 +26,9 @@ public:
 	void addParticle(Particle* p);
 
 	void applyForces(Particle* p);
+
+	void setExplosion(bool active) { activeExplosion = active; };
+private:
+	bool activeExplosion;
 };
 

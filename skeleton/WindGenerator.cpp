@@ -1,5 +1,5 @@
 #include "WindGenerator.h"
-WindGenerator::WindGenerator(const Vector3& velocidad, float k1, float k2, physx::PxVec3 centro, float radio) :ForceGenerator(), velocidad(velocidad), k1(k1), k2(k2), centro(centro), radio(radio) {
+WindGenerator::WindGenerator(const Vector3& velocidad, float k1, float k2, physx::PxVec3 centro, float radio) :ForceGenerator(INT_MAX), velocidad(velocidad), k1(k1), k2(k2), centro(centro), radio(radio) {
 
 };
 physx::PxVec3 WindGenerator::calculateForce(Particle* p) {

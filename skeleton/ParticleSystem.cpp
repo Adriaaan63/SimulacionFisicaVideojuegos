@@ -1,6 +1,6 @@
 #include "ParticleSystem.h"
 ParticleSystem::ParticleSystem() {
-
+	activeExplosion = false;
 }
 ParticleSystem::~ParticleSystem() {
 	for (auto p : particles) {
@@ -17,8 +17,14 @@ ParticleSystem::~ParticleSystem() {
 	forceGenerators.clear();
 }
 void ParticleSystem::update(double t) {
-	for (auto g : generators) {
-		g->update(t, this);
+	if (!activeExplosion) {
+		for (auto g : generators) {
+			g->update(t, this);
+		}
+	}
+	
+	for (auto fg : forceGenerators) {
+		fg->update(t, this);
 	}
 	auto it = particles.begin();
 	while (it != particles.end()) {
@@ -42,8 +48,18 @@ void ParticleSystem::addParticle(Particle* p) {
 
 void ParticleSystem::applyForces(Particle* p) {
 	physx::PxVec3 totalForce(0, 0, 0);
-	for (auto g : forceGenerators) {
-		totalForce += g->calculateForce(p);
+	auto it = forceGenerators.begin();
+	while (it != forceGenerators.end()) {
+		if ((*it)->isAlive()) {
+			totalForce += (*it)->calculateForce(p);
+			++it;
+		}
+		else {
+			auto aux = it;
+			++it;
+			delete* aux;
+			forceGenerators.erase(aux);
+		}
 	}
 	p->setForce(totalForce);
 }
