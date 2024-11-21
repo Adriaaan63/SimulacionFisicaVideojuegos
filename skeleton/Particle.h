@@ -3,6 +3,10 @@
 #include "RenderUtils.hpp"
 #include "PxPhysics.h"
 
+enum class GeometryType {
+	SPHERE,
+	BOX
+};
 class Particle
 {
 public:
@@ -10,6 +14,9 @@ public:
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel,Vector4 color, physx::PxVec3 Acc, double damping, float mass_, physx::PxVec3 force = { 0,0,0 });
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel,Vector4 color, float mass_, physx::PxVec3 acc = { 0,0,0 }, physx::PxVec3 force = { 0,0,0 });
 	Particle(Particle& const p);
+	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float time_, physx::PxVec3 Acc, double Damping, physx::PxVec3 force = { 0,0,0 });
+	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float time_, physx::PxVec3 Acc, double Damping,GeometryType type, physx::PxVec3 tam = {1,1,1}, physx::PxVec3 force = {0,0,0});
+
 	virtual ~Particle();
 
 	virtual void integrate(double t);
@@ -50,7 +57,7 @@ public:
 		force = newforce;
 	}
 
-	void createRenderItem();
+	void createRenderItem(GeometryType type, physx::PxVec3 tam);
 	Particle& operator=(const Particle& p) {
 		pose = p.pose;
 		vel = p.vel;
@@ -62,11 +69,12 @@ public:
 		mass = p.mass;
 		force = p.force;
 		color = p.color;
-		createRenderItem();
+		createRenderItem(p._type, p.tam);
 		
 		return *this;
 	}
 protected:
+	GeometryType _type = GeometryType::SPHERE;
 	physx::PxVec3 vel;
 	physx::PxVec3 acc;
 	physx::PxVec3 force;
@@ -78,5 +86,6 @@ protected:
 	float radius;
 	float timeLife;
 	float mass;
+	physx::PxVec3 tam;
 };
 

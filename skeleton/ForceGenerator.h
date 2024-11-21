@@ -3,7 +3,7 @@ class ParticleSystem;
 #include "Particle.h"
 class ForceGenerator {
 public:
-    ForceGenerator(float duration): duration(duration), alive(true) {};
+    ForceGenerator(float duration = 0): duration(duration), alive(true) {};
     virtual physx::PxVec3 calculateForce(Particle* p) = 0;
 
     virtual ~ForceGenerator() {}

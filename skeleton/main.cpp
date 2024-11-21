@@ -91,8 +91,12 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	ParticleSys = new ParticleSystem();
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.01, Vector4(1,1,1,1));
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.25, Vector4(1,0,1,1));
+	//ParticleSys->generateSpringDemo();
+	//ParticleSys->generateAnchorSpringDemo();
+	ParticleSys->generateBuoyancyFG();
+
+	/*ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.01, Vector4(1,1,1,1));
+	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.25, Vector4(1,0,1,1));*/
 	/*ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(50, 0, 0), 30, 5, 0, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(10, 10, 10)));
 	ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(-50, 0, 0), 30, 5, 20, 20, physx::PxVec3(-50, -50, -50), physx::PxVec3(50, 50, 50)));*/
 	//ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(0, 0, 0), 100, 5));
@@ -162,6 +166,24 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'H':
 		ParticleSys->setExplosion(true);
 		ParticleSys->createForceGenerator(new ExplosionForceGenerator(physx::PxVec3(0,0,0), 150.0f, 1000.0f, 1.0f));
+		break;
+	case 'E':
+		ParticleSys->setKSpringFG(50);
+		break;
+	case 'F':
+		ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0), 2.0f));
+		break;
+	case 'M':
+		break;
+	case 'V':
+		if (ParticleSys->getFgFlot() != nullptr) {
+			ParticleSys->getFgFlot()->setVolume(0.1f);
+		}
+		break;
+	case 'B':
+		if (ParticleSys->getFgFlot() != nullptr) {
+			ParticleSys->getFgFlot()->setVolume(-0.1f);
+		}
 		break;
 	default:
 		break;
