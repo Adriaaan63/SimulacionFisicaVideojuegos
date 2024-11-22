@@ -91,8 +91,8 @@ void ParticleSystem::generateAnchorSpringDemo() {
 void ParticleSystem::generateBuoyancyFG() {
 	Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0,0,0 }, Vector4(1, 1, 1, 1), 60, { 0,0,0 }, 0.85, GeometryType::BOX, { 1,1,1 });
 	/*Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0.0,0.0,0.0 }, Vector4(1, 1, 1, 1), 60.0f, { 0.0,0.0,0.0 }, 0.85);*/
-	p4->setMass(1000);
-	f4 = new BuoyancyForceGenerator(0.1, 0.05, 1000.0, { -10.0,20.0,0.0 });
+	p4->setMass(75);
+	f4 = new BuoyancyForceGenerator(1, 1, 1000.0, { -10.0,30.0,0.0 });
 	forceGenerators.push_back(f4);
 	particles.push_back(p4);
 }

@@ -18,6 +18,6 @@ physx::PxVec3 BuoyancyForceGenerator::calculateForce(Particle* p) {
 	else {
 		inmersed = (h0 - h) / height + 0.5f;
 	}
-	f.y = density * volume * inmersed * _gravitity;
+	f.y = density * volume * inmersed;
 	return f;
 }

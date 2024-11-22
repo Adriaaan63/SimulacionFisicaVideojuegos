@@ -93,18 +93,25 @@ void initPhysics(bool interactive)
 	ParticleSys = new ParticleSystem();
 	//ParticleSys->generateSpringDemo();
 	//ParticleSys->generateAnchorSpringDemo();
-	ParticleSys->generateBuoyancyFG();
+	/*ParticleSys->generateBuoyancyFG();*/
+	
+	////Viento
+	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 2000, 25, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 10, Vector4(1,1,1,1));
+	//ParticleSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10, 0, Vector3(0, 100, 0), 70.0f));
 
-	/*ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.01, Vector4(1,1,1,1));
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.25, Vector4(1,0,1,1));*/
+	//Torbellino
+	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.01, Vector4(1, 1, 1, 1));
+	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 2000, 50, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.05, Vector4(1, 0, 1, 1));
+	ParticleSys->createForceGenerator(new TornadoGenerator(physx::PxVec3(0, 0, 0), 0.25, 0, Vector3(0, 0, 0), 2000.0F, 5.0F));
+
+	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.25, Vector4(1,0,1,1));
 	/*ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(50, 0, 0), 30, 5, 0, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(10, 10, 10)));
 	ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(-50, 0, 0), 30, 5, 20, 20, physx::PxVec3(-50, -50, -50), physx::PxVec3(50, 50, 50)));*/
 	//ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(0, 0, 0), 100, 5));
 
+	//ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, -10, 0)));
 	//ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0)));
-	/*ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0)));*/
-	//ParticleSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10,0, Vector3(0, 100, 0), 50.0f));
-	//ParticleSys->createForceGenerator(new TornadoGenerator(physx::PxVec3(0, 0, 0), 0.25,0, Vector3(0, 0, 0), 100.0F,2.0F));
+	
 	}
 
 

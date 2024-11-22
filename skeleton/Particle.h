@@ -86,6 +86,6 @@ protected:
 	float radius;
 	float timeLife;
 	float mass;
-	physx::PxVec3 tam;
+	physx::PxVec3 tam = { 1,1,1 };
 };
 
