@@ -19,6 +19,7 @@
 #include "WindGenerator.h"
 #include "UniformGenerator.h"
 #include "ExplosionForceGenerator.h"
+#include "SolidoRigido.h"
 
 std::string display_text = "This is a test";
 
@@ -93,16 +94,16 @@ void initPhysics(bool interactive)
 	ParticleSys = new ParticleSystem();
 	//ParticleSys->generateSpringDemo();
 	//ParticleSys->generateAnchorSpringDemo();
-	/*ParticleSys->generateBuoyancyFG();*/
+	//ParticleSys->generateBuoyancyFG();
 	
-	////Viento
+	//Viento
 	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 2000, 25, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 10, Vector4(1,1,1,1));
 	//ParticleSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10, 0, Vector3(0, 100, 0), 70.0f));
 
 	//Torbellino
-	ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.01, Vector4(1, 1, 1, 1));
+	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.01, Vector4(1, 1, 1, 1));
 	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 2000, 50, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.05, Vector4(1, 0, 1, 1));
-	ParticleSys->createForceGenerator(new TornadoGenerator(physx::PxVec3(0, 0, 0), 0.25, 0, Vector3(0, 0, 0), 2000.0F, 5.0F));
+	//ParticleSys->createForceGenerator(new TornadoGenerator(physx::PxVec3(0, 0, 0), 0.25, 0, Vector3(0, 0, 0), 2000.0F, 5.0F));
 
 	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 200, 5, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 0.25, Vector4(1,0,1,1));
 	/*ParticleSys->createGenerator(new UniformGenerator(physx::PxVec3(50, 0, 0), 30, 5, 0, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(10, 10, 10)));
@@ -112,6 +113,16 @@ void initPhysics(bool interactive)
 	//ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, -10, 0)));
 	//ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0)));
 	
+	//SolidosRigidos
+	/*PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
+	PxShape* shape4 = CreateShape(PxBoxGeometry(100, 0.1, 100));
+	suelo->attachShape(*shape4);
+	gScene->addActor(*suelo);
+	RenderItem* item;
+	item = new RenderItem(shape4, suelo, { 0.8,0.8,0.8,1 });*/
+
+	SolidoRigido* solidoDinamico = new SolidoRigido(gPhysics, { -70,200,-70 }, { 0,5,0 }, { 0,0,0 }, { 5,5,5 });
+	gScene->addActor(*solidoDinamico->getSolido());
 	}
 
 
