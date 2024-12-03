@@ -10,3 +10,13 @@ physx::PxVec3 WindGenerator::calculateForce(Particle* p) {
     }
     return physx::PxVec3(0, 0, 0);
 }
+
+physx::PxVec3 WindGenerator::calculateForceSolid(SolidoRigido* p)
+{
+    if ((p->getPose().p - centro).magnitude() <= radio) {
+        // Aplicar la fuerza de viento solo si está dentro del volumen
+        calculateVelSolid(p);
+        return k1 * (velocidad - p->getSolido()->getLinearVelocity()) + k2 * (velocidad - p->getSolido()->getLinearVelocity()).magnitude() * (velocidad - p->getSolido()->getLinearVelocity());
+    }
+    return physx::PxVec3(0, 0, 0);
+}

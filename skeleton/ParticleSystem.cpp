@@ -1,5 +1,5 @@
 #include "ParticleSystem.h"
-ParticleSystem::ParticleSystem() {
+ParticleSystem::ParticleSystem():Systems() {
 	activeExplosion = false;
 }
 ParticleSystem::~ParticleSystem() {
@@ -7,14 +7,6 @@ ParticleSystem::~ParticleSystem() {
 		delete p;
 	}
 	particles.clear();
-	for (auto g : generators) {
-		delete g;
-	}
-	generators.clear();
-	for (auto fg : forceGenerators) {
-		delete fg;
-	}
-	forceGenerators.clear();
 }
 void ParticleSystem::update(double t) {
 	if (!activeExplosion) {

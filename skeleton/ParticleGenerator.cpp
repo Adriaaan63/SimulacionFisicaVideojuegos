@@ -1,5 +1,6 @@
 #include "ParticleGenerator.h"
 #include "ParticleSystem.h"
+#include "SolidosRSystem.h"
 ParticleGenerator::ParticleGenerator(physx::PxVec3 pos, float posMax, float posMin) : pos(pos), posMax(posMax), posMin(posMin) {
 }
 ParticleGenerator::~ParticleGenerator(){
@@ -7,6 +8,12 @@ ParticleGenerator::~ParticleGenerator(){
 }
 void ParticleGenerator::update(double t, ParticleSystem* prSys) {
 	prSys->addParticle(generateParticle());
+
+}
+void ParticleGenerator::updateSolid(double t, SolidosRSystem* prSys) {
+    SolidoRigido* s = generateSolidoRigido();
+    if(s != nullptr)
+        prSys->addSolido(s);
 
 }
 physx::PxVec3 ParticleGenerator::calculatePosicion() {
@@ -23,3 +30,7 @@ physx::PxVec3 ParticleGenerator::calculatePosicion() {
     // Retornar la nueva posición aleatoria
     return physx::PxVec3(randomX, randomY, randomZ);
 }
+
+
+
+

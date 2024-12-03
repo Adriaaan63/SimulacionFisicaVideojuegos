@@ -7,12 +7,13 @@
 #include "AnchoredSpringFG.h"
 #include "BuoyancyForceGenerator.h"
 #include <iostream>
-class ParticleSystem
+#include "Systems.h"
+class ParticleSystem: public Systems
 {
 protected:
 	std::list<Particle*> particles;
-	std::list<ParticleGenerator*> generators;
-	std::list<ForceGenerator*> forceGenerators;
+	/*std::list<ParticleGenerator*> generators;
+	std::list<ForceGenerator*> forceGenerators;*/
 public:
 	ParticleSystem();
 	~ParticleSystem();
@@ -23,9 +24,10 @@ public:
 		g->setModel(p);
 		generators.push_back(g);
 	}
-	void createForceGenerator(ForceGenerator* g) {
+
+	/*void createForceGenerator(ForceGenerator* g) {
 		forceGenerators.push_back(g);
-	}
+	}*/
 	void generateSpringDemo();
 	void generateAnchorSpringDemo();
 	void generateBuoyancyFG();
@@ -35,7 +37,7 @@ public:
 
 	void applyForces(Particle* p);
 
-	void setExplosion(bool active) { activeExplosion = active; };
+	//void setExplosion(bool active) { activeExplosion = active; };
 
 	void setKSpringFG(double newK) {
 		f3->setK(f3->getK() + newK);
@@ -43,7 +45,7 @@ public:
 	}
 	BuoyancyForceGenerator* getFgFlot() const { return f4; };
 private:
-	bool activeExplosion;
+	//bool activeExplosion;
 	AnchoredSpringFG* f3;
 	BuoyancyForceGenerator* f4;
 };

@@ -12,6 +12,8 @@ public:
 	~NormalGenerator() {};
 	Particle* generateParticle() override;
 	float generateGausssian(float mean, float stddev);
-	
+	SolidoRigido* generateSolidoRigido() override {
+		return nullptr;
+	}
 };
 

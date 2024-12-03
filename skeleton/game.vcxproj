@@ -269,7 +269,10 @@
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="NormalGenerator.cpp" />
     <ClCompile Include="SolidoRigido.cpp" />
+    <ClCompile Include="SolidosGenerator.cpp" />
+    <ClCompile Include="SolidosRSystem.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
+    <ClCompile Include="Systems.cpp" />
     <ClCompile Include="TornadoGenerator.cpp" />
     <ClCompile Include="UniformGenerator.cpp" />
     <ClCompile Include="WindGenerator.cpp" />
@@ -291,7 +294,10 @@
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="NormalGenerator.h" />
     <ClInclude Include="SolidoRigido.h" />
+    <ClInclude Include="SolidosGenerator.h" />
+    <ClInclude Include="SolidosRSystem.h" />
     <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="Systems.h" />
     <ClInclude Include="TornadoGenerator.h" />
     <ClInclude Include="UniformGenerator.h" />
     <ClInclude Include="Vector3D.h" />

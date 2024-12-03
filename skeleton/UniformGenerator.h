@@ -12,5 +12,8 @@ public:
 	~UniformGenerator() {};
 	Particle* generateParticle() override;
 	float generateUniform(float min, float max);
+	SolidoRigido* generateSolidoRigido() override {
+		return nullptr;
+	}
 };
 

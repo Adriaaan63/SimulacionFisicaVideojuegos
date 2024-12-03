@@ -19,7 +19,9 @@
 #include "WindGenerator.h"
 #include "UniformGenerator.h"
 #include "ExplosionForceGenerator.h"
+#include "SolidosGenerator.h"
 #include "SolidoRigido.h"
+#include "SolidosRSystem.h"
 
 std::string display_text = "This is a test";
 
@@ -46,7 +48,7 @@ RenderItem* obj2 = NULL;
 RenderItem* obj3 = NULL;
 std::vector<Particle*> proyectiles;
 ParticleSystem* ParticleSys;
-
+SolidosRSystem* SolidoSys;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -92,6 +94,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	ParticleSys = new ParticleSystem();
+	SolidoSys = new SolidosRSystem(10);
 	//ParticleSys->generateSpringDemo();
 	//ParticleSys->generateAnchorSpringDemo();
 	//ParticleSys->generateBuoyancyFG();
@@ -114,16 +117,20 @@ void initPhysics(bool interactive)
 	//ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0)));
 	
 	//SolidosRigidos
-	/*PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
+	PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
 	PxShape* shape4 = CreateShape(PxBoxGeometry(100, 0.1, 100));
 	suelo->attachShape(*shape4);
 	gScene->addActor(*suelo);
 	RenderItem* item;
-	item = new RenderItem(shape4, suelo, { 0.8,0.8,0.8,1 });*/
+	item = new RenderItem(shape4, suelo, { 0.8,0.8,0.8,1 });
 
-	SolidoRigido* solidoDinamico = new SolidoRigido(gPhysics, { -70,200,-70 }, { 0,5,0 }, { 0,0,0 }, { 5,5,5 });
-	gScene->addActor(*solidoDinamico->getSolido());
-	}
+	/*SolidoRigido* solidoDinamico = new SolidoRigido(gPhysics, { -70,200,-70 }, { 0,5,0 }, { 0,0,0 }, { 5,5,5 });
+	gScene->addActor(*solidoDinamico->getSolido());*/
+	SolidoSys->createGeneratorSolids(new SolidosGenerator(physx::PxVec3(-70, 200, -70), 500, 1000, 10, gScene));
+	//SolidoSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0)));
+	SolidoSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10, 0, Vector3(0, 0, 0), 100.0f));
+}
+	
 
 
 // Function to configure what happens in each step of physics
@@ -135,12 +142,14 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+	
 
 	/*particle->integrate(t);*/
 	for (auto& e : proyectiles) {
 		e->integrate(t);
 	}
 	ParticleSys->update(t);
+	SolidoSys->update(t);
 	
 }
 
@@ -182,8 +191,8 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		proyectiles.push_back(new Proyectil(GetCamera()->getTransform().p, GetCamera()->getDir() * 50, physx::PxVec3(0, 0, 0), 20, physx::PxVec3(0, 0, 1000)));
 		break;
 	case 'H':
-		ParticleSys->setExplosion(true);
-		ParticleSys->createForceGenerator(new ExplosionForceGenerator(physx::PxVec3(0,0,0), 150.0f, 1000.0f, 1.0f));
+		SolidoSys->setExplosion(true);
+		SolidoSys->createForceGenerator(new ExplosionForceGenerator(physx::PxVec3(0,0,0), 150.0f, 10000.0f, 1.0f));
 		break;
 	case 'E':
 		ParticleSys->setKSpringFG(50);
@@ -203,6 +212,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 			ParticleSys->getFgFlot()->setVolume(-0.1f);
 		}
 		break;
+
 	default:
 		break;
 	}

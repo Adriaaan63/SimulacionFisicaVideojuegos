@@ -8,6 +8,10 @@ GravityForceGenerator::GravityForceGenerator(const Vector3& gravity, float dur) 
 physx::PxVec3 GravityForceGenerator::calculateForce(Particle* p) {
 	return gravity * p->getMass();
 }
+physx::PxVec3 GravityForceGenerator::calculateForceSolid(SolidoRigido* p)
+{
+	return gravity * p->getSolido()->getMass();
+}
 void GravityForceGenerator::update(double t, ParticleSystem* prSys) {
 	duration -= t;
 	if (duration < 0) {

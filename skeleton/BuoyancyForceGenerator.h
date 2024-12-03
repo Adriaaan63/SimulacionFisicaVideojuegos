@@ -8,6 +8,7 @@ public:
 	BuoyancyForceGenerator(float h, float V, float d, physx::PxVec3 fgPos);
 
 	physx::PxVec3 calculateForce(Particle* p) override;
+	physx::PxVec3 calculateForceSolid(SolidoRigido* p) override;
 
 	virtual ~BuoyancyForceGenerator() {}
 
