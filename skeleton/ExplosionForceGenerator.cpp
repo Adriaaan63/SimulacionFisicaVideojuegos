@@ -38,7 +38,7 @@ physx::PxVec3 ExplosionForceGenerator::calculateForceSolid(SolidoRigido* p)
 {
 	if (d < radio) {
 		caldulateDistanceSolid(p);
-		physx::PxVec3 forceExplosion = (k / pow(d, 2)) * physx::PxVec3(p->getPose().p.x - centro.x, p->getPose().p.y - centro.y, p->getPose().p.z - centro.z) * std::exp(-duration / ct);
+		physx::PxVec3 forceExplosion = (k / pow(d, 2)) * physx::PxVec3(p->getSolido()->getGlobalPose().p.x - centro.x, p->getSolido()->getGlobalPose().p.y - centro.y, p->getSolido()->getGlobalPose().p.z - centro.z) * std::exp(-duration / ct);
 		return forceExplosion;
 	}
 	else
@@ -50,7 +50,7 @@ void ExplosionForceGenerator::caldulateDistance(Particle* p) {
 		pow(p->getPose().p.z - centro.z, 2));
 }
 void ExplosionForceGenerator::caldulateDistanceSolid(SolidoRigido* p) {
-	d = sqrt(pow(p->getPose().p.x - centro.x, 2) +
-		pow(p->getPose().p.y - centro.y, 2) +
-		pow(p->getPose().p.z - centro.z, 2));
+	d = sqrt(pow(p->getSolido()->getGlobalPose().p.x - centro.x, 2) +
+		pow(p->getSolido()->getGlobalPose().p.y - centro.y, 2) +
+		pow(p->getSolido()->getGlobalPose().p.z - centro.z, 2));
 }

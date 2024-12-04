@@ -17,7 +17,7 @@ physx::PxVec3 SpringForceGenerator::calculateForce(Particle* p) {
 
 physx::PxVec3 SpringForceGenerator::calculateForceSolid(SolidoRigido* p)
 {
-	Vector3 relative_pos_vector = _other->getPose().p - p->getPose().p;
+	Vector3 relative_pos_vector = _other->getPose().p - p->getSolido()->getGlobalPose().p;
 	Vector3 force;
 
 	const float leght = relative_pos_vector.normalize();

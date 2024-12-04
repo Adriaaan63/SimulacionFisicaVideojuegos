@@ -2,6 +2,7 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "PxPhysics.h"
+#include "geometry/PxGeometry.h"
 class SolidoRigido
 {
 private:
@@ -9,18 +10,17 @@ private:
 	physx::PxShape* shape;
 	physx::PxScene* gScene;
 	physx::PxTransform pose;
-	physx::PxVec3 tam;
 	float timeLife;
 	RenderItem* dynamicItem;
 public:
 	SolidoRigido() {};
-	SolidoRigido(physx::PxScene* gScene,physx::PxTransform transform, physx::PxVec3 linVel, physx::PxVec3 angVel, physx::PxVec3 tam);
+	SolidoRigido(physx::PxScene* gScene,physx::PxGeometry* geo,physx::PxTransform transform,
+		physx::PxVec3 linVel, physx::PxVec3 angVel, float mass, physx::PxMaterial* material);
 	SolidoRigido(SolidoRigido& const s);
 	SolidoRigido& operator=(const SolidoRigido& p) {
 		newSolid = p.newSolid;
 		shape = p.shape;
 		gScene = p.gScene;
-		tam = p.tam;
 		return *this;
 	}
 	~SolidoRigido() {
@@ -28,7 +28,7 @@ public:
 		if (dynamicItem != nullptr)
 			DeregisterRenderItem(dynamicItem);
 	};
-
+	physx::PxVec3 calculateInertiaTensor(float mass);
 	physx::PxRigidDynamic* getSolido() const {
 		return newSolid;
 	}
@@ -51,8 +51,7 @@ public:
 	}
 	void setSolidoInScene() {
 		gScene->addActor(*newSolid);
-	}
-	physx::PxVec3 getTam() const { return tam; };
+	};
 	bool isAlive();
 	void integrate(double t);
 };

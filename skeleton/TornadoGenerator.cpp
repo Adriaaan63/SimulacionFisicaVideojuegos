@@ -8,6 +8,6 @@ void TornadoGenerator::calculateVel(Particle* p) {
 	velocidad = intensity * vTor;
 }
 void TornadoGenerator::calculateVelSolid(SolidoRigido* p) {
-	physx::PxVec3 vTor = { -(p->getPose().p.z - centro.z), 0, p->getPose().p.x - centro.x };
+	physx::PxVec3 vTor = { -(p->getSolido()->getGlobalPose().p.z - centro.z), 0, p->getSolido()->getGlobalPose().p.x - centro.x };
 	velocidad = intensity * vTor;
 }

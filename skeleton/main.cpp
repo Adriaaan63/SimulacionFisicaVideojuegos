@@ -127,8 +127,8 @@ void initPhysics(bool interactive)
 	/*SolidoRigido* solidoDinamico = new SolidoRigido(gPhysics, { -70,200,-70 }, { 0,5,0 }, { 0,0,0 }, { 5,5,5 });
 	gScene->addActor(*solidoDinamico->getSolido());*/
 	SolidoSys->createGeneratorSolids(new SolidosGenerator(physx::PxVec3(-70, 200, -70), 500, 1000, 10, gScene));
-	//SolidoSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0)));
-	SolidoSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10, 0, Vector3(0, 0, 0), 100.0f));
+	//SolidoSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, -10, 0)));
+	//SolidoSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10, 0, Vector3(0, 0, 0), 100.0f));
 }
 	
 

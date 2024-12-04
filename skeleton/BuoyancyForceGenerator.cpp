@@ -24,7 +24,7 @@ physx::PxVec3 BuoyancyForceGenerator::calculateForce(Particle* p) {
 
 physx::PxVec3 BuoyancyForceGenerator::calculateForceSolid(SolidoRigido* p)
 {
-	float h = p->getPose().p.y;
+	float h = p->getSolido()->getGlobalPose().p.y;
 	float h0 = liquidParticle->getPose().p.y;
 
 	physx::PxVec3 f(0, 0, 0);
