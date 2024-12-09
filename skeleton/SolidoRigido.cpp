@@ -1,18 +1,17 @@
 #include "SolidoRigido.h"
 SolidoRigido::SolidoRigido(physx::PxScene* sc, physx::PxGeometry* geo, 
     physx::PxTransform transform, physx::PxVec3 linVel, physx::PxVec3 angVel, 
-    float mass, physx::PxMaterial* material) :gScene(sc), pose(transform),
- timeLife(20)
+    float mass, physx::PxMaterial* material, float time) : Solidos(sc,geo,transform,material),
+ timeLife(time)
 {
 	newSolid = gScene->getPhysics().createRigidDynamic(transform);
 	newSolid->setLinearVelocity(linVel);
 	newSolid->setAngularVelocity(angVel);
-	shape = CreateShape(*geo, material);
 	newSolid->attachShape(*shape);
 	Vector3 inertiaTensor = calculateInertiaTensor(mass);
 	newSolid->setMassSpaceInertiaTensor(inertiaTensor);
 	newSolid->setMass(mass);
-	dynamicItem = new RenderItem(shape, newSolid, { 0.8,0.8,0.8,1 });
+	renderItem = new RenderItem(shape, newSolid, { 0.8,0.8,0.8,1 });
 }
 SolidoRigido::SolidoRigido(SolidoRigido& const p) {
 	*this = p;

@@ -53,7 +53,8 @@ void Particle::createRenderItem(GeometryType type, physx::PxVec3 tam) {
 	
 }
 void Particle::integrate(double t) {
-	acc = force / mass;
+	if(force.normalize() != 0)
+		acc = force / mass;
 	pose.p += vel * t;
 	vel += acc * t;
 	

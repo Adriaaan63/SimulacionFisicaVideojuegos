@@ -4,7 +4,7 @@
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
-
+#include "ProjectileTrajectoryGenerator.h"
 
 using namespace physx;
 
@@ -20,6 +20,9 @@ std::vector<const RenderItem*> gRenderItems;
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
 __int64 CounterLast = 0;
+
+extern bool canUseCalbacks;
+extern ProjectileTrajectoryGenerator* trajectoryGen;
 
 void StartCounter()
 {
@@ -50,6 +53,18 @@ namespace
 void motionCallback(int x, int y)
 {
 	sCamera->handleMotion(x, y);
+	// Actualizar posición y velocidad inicial basadas en la cámara
+	if (trajectoryGen != nullptr) {
+		PxVec3 cameraPos = sCamera->getTransform().p; // Posición actual de la cámara
+		PxVec3 cameraDir = sCamera->getDir() * 400;   // Dirección de la cámara, escalada para simular velocidad inicial
+
+		// Actualizar posición y velocidad inicial del generador de trayectoria
+		trajectoryGen->setPosition(cameraPos);
+		trajectoryGen->setVelocity(cameraDir);
+
+		// Generar nueva trayectoria
+		trajectoryGen->generateTrajectory();
+	}
 }
 
 void keyboardCallback(unsigned char key, int x, int y)
@@ -57,14 +72,20 @@ void keyboardCallback(unsigned char key, int x, int y)
 	if(key==27)
 		exit(0);
 
-	if(!sCamera->handleKey(key, x, y))
-		keyPress(key, sCamera->getTransform());
+	if (canUseCalbacks) {
+		if (!sCamera->handleKey(key, x, y))
+			keyPress(key, sCamera->getTransform());
+	}
+	
 }
-
+extern void createTrayectoria();
 void mouseCallback(int button, int state, int x, int y)
 {
 	sCamera->handleMouse(button, state, x, y);
+
+	
 }
+
 
 void idleCallback()
 {
@@ -137,7 +158,7 @@ void exitCallback(void)
 void renderLoop()
 {
 	StartCounter();
-	sCamera = new Camera(PxVec3(50.0f, 50.0f, 50.0f), PxVec3(-0.6f,-0.2f,-0.7f));
+	sCamera = new Camera(PxVec3(500.0f, 80.0f, 0.0f), PxVec3(-0.6f,0.0f,0.0f));
 
 	setupDefaultWindow("Simulacion Fisica Videojuegos");
 	setupDefaultRenderState();
@@ -146,6 +167,8 @@ void renderLoop()
 	glutDisplayFunc(renderCallback);
 	glutKeyboardFunc(keyboardCallback);
 	glutMouseFunc(mouseCallback);
+
+	//Quitar pa no mover camara con raton
 	glutMotionFunc(motionCallback);
 	motionCallback(0,0);
 

@@ -29,6 +29,6 @@ SolidoRigido* SolidosGenerator::generateSolidoRigido()
 
 
     // Configurar el sólido en la escena
-    s->setSolidoInScene();
+    s->setSolidoInScene(s->getSolido());
     return s;
 }

@@ -1,15 +1,19 @@
 #pragma once
 #include <list>
 #include "SolidoRigido.h"
+#include "SolidosEstaticos.h"
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringFG.h"
 #include "BuoyancyForceGenerator.h"
 #include <iostream>
 #include "Systems.h"
+#include "Piramide.h"
+
 class SolidosRSystem: public Systems
 {
 protected:
 	std::list<SolidoRigido*> solidos;
+	std::list<SolidosEstaticos*> solidosEstaticos;
 	int maxSolidos;
 	int numSolidos;
 	/*std::list<ParticleGenerator*> generators;
@@ -41,6 +45,10 @@ public:
 		std::cout << f3->getK() << std::endl;
 	}
 	BuoyancyForceGenerator* getFgFlot() const { return f4; };*/
+
+	void createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo,
+		physx::PxTransform transform, physx::PxMaterial* material);
+	void createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics);
 private:
 	bool activeExplosion;
 	/*AnchoredSpringFG* f3;

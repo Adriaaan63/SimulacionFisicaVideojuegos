@@ -7,6 +7,10 @@ SolidosRSystem::~SolidosRSystem() {
 		delete p;
 	}
 	solidos.clear();
+	for (auto p : solidosEstaticos) {
+		delete p;
+	}
+	solidosEstaticos.clear();
 }
 void SolidosRSystem::update(double t) {
 	if (!activeExplosion) {
@@ -56,7 +60,20 @@ void SolidosRSystem::applyForces(SolidoRigido* p) {
 			forceGenerators.erase(aux);
 		}
 	}
+	if(totalForce.normalize() > 0)
 	p->getSolido()->addForce(totalForce,physx::PxForceMode::eFORCE);
+}
+void SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material)
+{
+	SolidosEstaticos* newsolidoEstatico = new SolidosEstaticos(gScene, geo, transform, material);
+	solidosEstaticos.push_back(newsolidoEstatico);
+	gScene->addActor(*newsolidoEstatico->getSolido());
+}
+void SolidosRSystem::createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics)
+{
+	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.6f); // Fricción y restitución
+	Piramide* piramide = new Piramide(gScene,this, material, 250.0f, 25.0f, 10.0f);
+	piramide->createPiramide();
 }
 //void SolidoRigido::generateSpringDemo() {
 //	// First one standard spring uniting 2 particles

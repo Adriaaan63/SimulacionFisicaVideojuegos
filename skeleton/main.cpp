@@ -22,6 +22,7 @@
 #include "SolidosGenerator.h"
 #include "SolidoRigido.h"
 #include "SolidosRSystem.h"
+#include "ProjectileTrajectoryGenerator.h"
 
 std::string display_text = "This is a test";
 
@@ -49,7 +50,22 @@ RenderItem* obj3 = NULL;
 std::vector<Particle*> proyectiles;
 ParticleSystem* ParticleSys;
 SolidosRSystem* SolidoSys;
+SolidoRigido* s;
+ProjectileTrajectoryGenerator* trajectoryGen;
 
+bool canUseCalbacks;
+void createTrayectoria() {
+	// Obtener la posición y velocidad del proyectil desde la cámara
+	physx::PxVec3 initialPos = GetCamera()->getTransform().p;
+	physx::PxVec3 initialVel = GetCamera()->getDir() * 400;
+
+	// Crear un generador de trayectoria
+	trajectoryGen = new ProjectileTrajectoryGenerator(initialPos, initialVel, 0.1f, 5.0f);
+
+	// Generar y visualizar la trayectoria
+	trajectoryGen->generateTrajectory();
+
+}
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -95,10 +111,14 @@ void initPhysics(bool interactive)
 
 	ParticleSys = new ParticleSystem();
 	SolidoSys = new SolidosRSystem(10);
+
+	
+#pragma region Practica
+	//------------------------------Practicas----------------------------------------------
 	//ParticleSys->generateSpringDemo();
 	//ParticleSys->generateAnchorSpringDemo();
 	//ParticleSys->generateBuoyancyFG();
-	
+
 	//Viento
 	//ParticleSys->createGenerator(new NormalGenerator(physx::PxVec3(0, 0, 0), 2000, 25, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2)), 10, Vector4(1,1,1,1));
 	//ParticleSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10, 0, Vector3(0, 100, 0), 70.0f));
@@ -115,20 +135,35 @@ void initPhysics(bool interactive)
 
 	//ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, -10, 0)));
 	//ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0)));
-	
+
 	//SolidosRigidos
-	PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
+	/*PxRigidStatic* suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
 	PxShape* shape4 = CreateShape(PxBoxGeometry(100, 0.1, 100));
 	suelo->attachShape(*shape4);
 	gScene->addActor(*suelo);
 	RenderItem* item;
-	item = new RenderItem(shape4, suelo, { 0.8,0.8,0.8,1 });
+	item = new RenderItem(shape4, suelo, { 0.8,0.8,0.8,1 });*/
 
 	/*SolidoRigido* solidoDinamico = new SolidoRigido(gPhysics, { -70,200,-70 }, { 0,5,0 }, { 0,0,0 }, { 5,5,5 });
 	gScene->addActor(*solidoDinamico->getSolido());*/
-	SolidoSys->createGeneratorSolids(new SolidosGenerator(physx::PxVec3(-70, 200, -70), 500, 1000, 10, gScene));
+	//SolidoSys->createGeneratorSolids(new SolidosGenerator(physx::PxVec3(-70, 200, -70), 500, 1000, 10, gScene));
 	//SolidoSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, -10, 0)));
 	//SolidoSys->createForceGenerator(new WindGenerator(physx::PxVec3(-100, 0, 0), 10, 0, Vector3(0, 0, 0), 100.0f));
+
+	//----------------------------------------------------------------------------------------------------------
+#pragma endregion
+
+#pragma region Proyecto
+	//------------------------------Proyecto----------------------------------------------
+	canUseCalbacks = true;
+	
+	SolidoSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(25, 100, 500), { 0,-100,0 }, gMaterial);
+	SolidoSys->createScene(gScene, gPhysics);
+	createTrayectoria();
+	//------------------------------------------------------------------------------------
+#pragma endregion
+
+	
 }
 	
 
@@ -188,7 +223,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'P':
-		proyectiles.push_back(new Proyectil(GetCamera()->getTransform().p, GetCamera()->getDir() * 50, physx::PxVec3(0, 0, 0), 20, physx::PxVec3(0, 0, 1000)));
+		
+		// Crear y lanzar el proyectil
+		s = new SolidoRigido(gScene,
+			&physx::PxSphereGeometry(8),
+			GetCamera()->getTransform(),
+			GetCamera()->getDir() * 400,
+			{ 0, 0, 0 },
+			0.2f, gMaterial);
+		gScene->addActor(*s->getSolido());
 		break;
 	case 'H':
 		SolidoSys->setExplosion(true);

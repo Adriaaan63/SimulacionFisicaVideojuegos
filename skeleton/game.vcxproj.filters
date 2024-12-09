@@ -28,6 +28,10 @@
     <ClCompile Include="SolidosRSystem.cpp" />
     <ClCompile Include="Systems.cpp" />
     <ClCompile Include="SolidosGenerator.cpp" />
+    <ClCompile Include="Solidos.cpp" />
+    <ClCompile Include="SolidosEstaticos.cpp" />
+    <ClCompile Include="Piramide.cpp" />
+    <ClCompile Include="ProjectileTrajectoryGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -58,6 +62,10 @@
     <ClInclude Include="SolidosRSystem.h" />
     <ClInclude Include="Systems.h" />
     <ClInclude Include="SolidosGenerator.h" />
+    <ClInclude Include="Solidos.h" />
+    <ClInclude Include="SolidosEstaticos.h" />
+    <ClInclude Include="Piramide.h" />
+    <ClInclude Include="ProjectileTrajectoryGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
