@@ -56,7 +56,7 @@ void motionCallback(int x, int y)
 	// Actualizar posición y velocidad inicial basadas en la cámara
 	if (trajectoryGen != nullptr) {
 		PxVec3 cameraPos = sCamera->getTransform().p; // Posición actual de la cámara
-		PxVec3 cameraDir = sCamera->getDir() * 400;   // Dirección de la cámara, escalada para simular velocidad inicial
+		PxVec3 cameraDir = sCamera->getDir() * 200;   // Dirección de la cámara, escalada para simular velocidad inicial
 
 		// Actualizar posición y velocidad inicial del generador de trayectoria
 		trajectoryGen->setPosition(cameraPos);
@@ -72,10 +72,10 @@ void keyboardCallback(unsigned char key, int x, int y)
 	if(key==27)
 		exit(0);
 
-	if (canUseCalbacks) {
-		if (!sCamera->handleKey(key, x, y))
+	
+	if (!sCamera->handleKey(key, x, y,1,canUseCalbacks))
 			keyPress(key, sCamera->getTransform());
-	}
+	
 	
 }
 extern void createTrayectoria();
@@ -162,6 +162,7 @@ void renderLoop()
 
 	setupDefaultWindow("Simulacion Fisica Videojuegos");
 	setupDefaultRenderState();
+	glutFullScreen();
 
 	glutIdleFunc(idleCallback);
 	glutDisplayFunc(renderCallback);

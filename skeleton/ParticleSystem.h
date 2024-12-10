@@ -37,6 +37,7 @@ public:
 
 	void applyForces(Particle* p);
 
+
 	//void setExplosion(bool active) { activeExplosion = active; };
 
 	void setKSpringFG(double newK) {

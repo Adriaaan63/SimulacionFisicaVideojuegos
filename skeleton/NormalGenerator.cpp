@@ -10,9 +10,11 @@ Particle* NormalGenerator::generateParticle() {
 	Particle* p = new Particle(particleModel);
 
 	p->setVel(physx::PxVec3(generateGausssian(means.x, stdDevs.x), generateGausssian(means.y, stdDevs.y), generateGausssian(means.z, stdDevs.z)));
+	p->setInitalPose(physx::PxTransform(pos));
 	p->setPose(physx::PxTransform(calculatePosicion()));
 	p->setRadius(radius);
 	p->setTimeLife(timeLifeParticle);
+	particulasGenerador.push_back(p);
 	return p;
 }
 float NormalGenerator::generateGausssian(float mean, float stddev)

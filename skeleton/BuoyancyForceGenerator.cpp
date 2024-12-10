@@ -1,7 +1,7 @@
 #include "BuoyancyForceGenerator.h"
 BuoyancyForceGenerator::BuoyancyForceGenerator(float h, float V, float d, physx::PxVec3 fgPos) :
 	height(h), volume(V), density(d) {
-	liquidParticle = new Particle(fgPos, { 0,0,0 }, Vector4(0, 1, 1, 1), 60, { 0,0,0 }, 0, GeometryType::BOX, {10,0.1,10});
+	liquidParticle = new Particle(fgPos, { 0,0,0 }, Vector4(0, 1, 1, 1), 60, { 0,0,0 }, 0, physx::PxGeometryType::eBOX, {10,0.1,10});
 }
 physx::PxVec3 BuoyancyForceGenerator::calculateForce(Particle* p) {
 	float h = p->getPose().p.y;

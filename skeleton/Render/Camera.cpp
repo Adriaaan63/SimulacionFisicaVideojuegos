@@ -54,21 +54,24 @@ void Camera::handleMouse(int button, int state, int x, int y)
 	mMouseY = y;
 }
 
-bool Camera::handleKey(unsigned char key, int x, int y, float speed)
+bool Camera::handleKey(unsigned char key, int x, int y, float speed, bool canUseKeysMove)
 {
 	PX_UNUSED(x);
 	PX_UNUSED(y);
-
-	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
-	switch(toupper(key))
-	{
-	case 'W':	mEye += mDir*2.0f*speed;		break;
-	case 'S':	mEye -= mDir*2.0f*speed;		break;
-	case 'A':	mEye -= viewY*2.0f*speed;		break;
-	case 'D':	mEye += viewY*2.0f*speed;		break;
-	default:							return false;
-	}
-	return true;
+    if (canUseKeysMove) {
+        PxVec3 viewY = mDir.cross(PxVec3(0, 1, 0)).getNormalized();
+        switch (toupper(key))
+        {
+        case 'W':	mEye += mDir * 2.0f * speed;		break;
+        case 'S':	mEye -= mDir * 2.0f * speed;		break;
+        case 'A':	mEye -= viewY * 2.0f * speed;		break;
+        case 'D':	mEye += viewY * 2.0f * speed;		break;
+        default:							return false;
+        }
+        return true;
+    }
+    return false;
+	
 }
 
 void Camera::handleAnalogMove(float x, float y)
@@ -80,21 +83,52 @@ void Camera::handleAnalogMove(float x, float y)
 
 void Camera::handleMotion(int x, int y)
 {
-	int dx = mMouseX - x;
-	int dy = mMouseY - y;
+    int dx = mMouseX - x;
+    int dy = mMouseY - y;
 
-	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
+    // Ángulos máximos permitidos en los ejes (en radianes)
+    const float maxVerticalAngle = PxPi / 10.0f;  // 45 grados
+    const float maxHorizontalAngle = PxPi / 8.0f; // 90 grados
 
-	PxQuat qx(PxPi * dx / 180.0f, PxVec3(0,1,0));
-	mDir = qx.rotate(mDir);
-	PxQuat qy(PxPi * dy / 180.0f, viewY);
-	mDir = qy.rotate(mDir);
+    // Variables estáticas para mantener el estado del ángulo acumulado
+    static float currentVerticalAngle = 0.0f;
+    static float currentHorizontalAngle = 0.0f;
 
-	mDir.normalize();
+    // Calcular rotación horizontal (giro izquierda/derecha)
+    float horizontalDelta = PxPi * dx / 180.0f;
+    float newHorizontalAngle = currentHorizontalAngle + horizontalDelta;
 
-	mMouseX = x;
-	mMouseY = y;
+    // Restringir el ángulo horizontal
+    if (newHorizontalAngle > maxHorizontalAngle)
+        horizontalDelta = maxHorizontalAngle - currentHorizontalAngle;
+    else if (newHorizontalAngle < -maxHorizontalAngle)
+        horizontalDelta = -maxHorizontalAngle - currentHorizontalAngle;
+
+    currentHorizontalAngle += horizontalDelta;
+    PxQuat qx(horizontalDelta, PxVec3(0, 1, 0));
+
+    // Calcular rotación vertical (giro arriba/abajo)
+    float verticalDelta = PxPi * dy / 180.0f;
+    float newVerticalAngle = currentVerticalAngle + verticalDelta;
+
+    // Restringir el ángulo vertical
+    if (newVerticalAngle > maxVerticalAngle)
+        verticalDelta = maxVerticalAngle - currentVerticalAngle;
+    else if (newVerticalAngle < -maxVerticalAngle)
+        verticalDelta = -maxVerticalAngle - currentVerticalAngle;
+
+    currentVerticalAngle += verticalDelta;
+    PxVec3 viewY = mDir.cross(PxVec3(0, 1, 0)).getNormalized();
+    PxQuat qy(verticalDelta, viewY);
+
+    // Aplicar las rotaciones restringidas
+    mDir = qy.rotate(qx.rotate(mDir)).getNormalized();
+
+    // Actualizar las coordenadas del ratón
+    mMouseX = x;
+    mMouseY = y;
 }
+
 
 PxTransform Camera::getTransform() const
 {

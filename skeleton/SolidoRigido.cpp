@@ -1,4 +1,5 @@
 #include "SolidoRigido.h"
+#include "ParticleGenerator.h"
 SolidoRigido::SolidoRigido(physx::PxScene* sc, physx::PxGeometry* geo, 
     physx::PxTransform transform, physx::PxVec3 linVel, physx::PxVec3 angVel, 
     float mass, physx::PxMaterial* material, float time) : Solidos(sc,geo,transform,material),
@@ -15,6 +16,21 @@ SolidoRigido::SolidoRigido(physx::PxScene* sc, physx::PxGeometry* geo,
 }
 SolidoRigido::SolidoRigido(SolidoRigido& const p) {
 	*this = p;
+}
+SolidoRigido::SolidoRigido(PxScene* scene, PxGeometry* geometry, PxTransform pose, PxVec3 linVel, PxVec3 angVel,
+    float mass, PxMaterial* material, ParticleGenerator* generator)
+    : Solidos(scene, geometry, pose, material), particleGenerator(generator) {
+    newSolid = gScene->getPhysics().createRigidDynamic(pose);
+    newSolid->setLinearVelocity(linVel);
+    newSolid->setAngularVelocity(angVel);
+    newSolid->attachShape(*shape);
+    Vector3 inertiaTensor = calculateInertiaTensor(mass);
+    newSolid->setMassSpaceInertiaTensor(inertiaTensor);
+    newSolid->setMass(mass);
+    renderItem = new RenderItem(shape, newSolid, { 0.8,0.8,0.8,1 });
+    if (particleGenerator) {
+        particleGenerator->setPose(pose); // Ajustar posición inicial
+    }
 }
 physx::PxVec3 SolidoRigido::calculateInertiaTensor(float mass)
 {
@@ -73,4 +89,8 @@ bool SolidoRigido::isAlive() {
 }
 void SolidoRigido::integrate(double t) {
 	timeLife -= t;
+    if (particleGenerator != nullptr) {
+        particleGenerator->setPose(newSolid->getGlobalPose());
+        
+    }
 }

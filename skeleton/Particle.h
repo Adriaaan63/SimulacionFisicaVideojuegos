@@ -15,7 +15,7 @@ public:
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel,Vector4 color, float mass_, physx::PxVec3 acc = { 0,0,0 }, physx::PxVec3 force = { 0,0,0 });
 	Particle(Particle& const p);
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float time_, physx::PxVec3 Acc, double Damping, physx::PxVec3 force = { 0,0,0 });
-	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float time_, physx::PxVec3 Acc, double Damping,GeometryType type, physx::PxVec3 tam = {1,1,1}, physx::PxVec3 force = {0,0,0});
+	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float time_, physx::PxVec3 Acc, double Damping, physx::PxGeometryType::Enum type, physx::PxVec3 tam = {1,1,1}, physx::PxVec3 force = {0,0,0});
 
 	virtual ~Particle();
 
@@ -57,7 +57,7 @@ public:
 		force = newforce;
 	}
 
-	void createRenderItem(GeometryType type, physx::PxVec3 tam);
+	void createRenderItem(physx::PxGeometryType::Enum type, physx::PxVec3 tam);
 	Particle& operator=(const Particle& p) {
 		pose = p.pose;
 		vel = p.vel;
@@ -74,7 +74,7 @@ public:
 		return *this;
 	}
 protected:
-	GeometryType _type = GeometryType::SPHERE;
+	physx::PxGeometryType::Enum _type = physx::PxGeometryType::Enum::eSPHERE;
 	physx::PxVec3 vel;
 	physx::PxVec3 acc;
 	physx::PxVec3 force;
@@ -86,6 +86,6 @@ protected:
 	float radius;
 	float timeLife;
 	float mass;
-	physx::PxVec3 tam = { 1,1,1 };
+	physx::PxVec3 tam = { 0.5,0.5,0.5 };
 };
 

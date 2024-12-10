@@ -5,6 +5,7 @@
 class ParticleSystem;
 class SolidosRSystem;
 #include <random>
+#include <list>
 const float GRAVITY = -9.8f;
 class ParticleGenerator
 {
@@ -29,10 +30,17 @@ public:
 		std::uniform_real_distribution<float>distrib(min, max);
 		return distrib(gen);
 	}
+	void setPose(physx::PxTransform newPose) { pos = newPose.p; };
+	std::list<Particle*> getParticulasGenerador() const { return particulasGenerador; };
+
+	bool getLive() const { return isLife; };
+	void setLife(bool life) { isLife = life; };
 protected:
 	physx::PxVec3 pos;
 	Particle particleModel;
+	std::list<Particle*> particulasGenerador;
 	float posMax;
 	float posMin;
+	bool isLife;
 };
 

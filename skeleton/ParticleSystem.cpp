@@ -10,8 +10,18 @@ ParticleSystem::~ParticleSystem() {
 }
 void ParticleSystem::update(double t) {
 	if (!activeExplosion) {
-		for (auto g : generators) {
-			g->update(t, this);
+		auto it = generators.begin();
+		while (it != generators.end()) {
+			if ((*it)->getLive()) {
+				(*it)->update(t, this);
+				++it;
+			}
+			else {
+				auto aux = it;
+				++it;
+				delete* aux;
+				generators.erase(aux);
+			}
 		}
 	}
 	
@@ -81,7 +91,7 @@ void ParticleSystem::generateAnchorSpringDemo() {
 	particles.push_back(p3);
 }
 void ParticleSystem::generateBuoyancyFG() {
-	Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0,0,0 }, Vector4(1, 1, 1, 1), 60, { 0,0,0 }, 0.85, GeometryType::BOX, { 1,1,1 });
+	Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0,0,0 }, Vector4(1, 1, 1, 1), 60, { 0,0,0 }, 0.85, physx::PxGeometryType::eBOX, { 1,1,1 });
 	/*Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0.0,0.0,0.0 }, Vector4(1, 1, 1, 1), 60.0f, { 0.0,0.0,0.0 }, 0.85);*/
 	p4->setMass(75);
 	f4 = new BuoyancyForceGenerator(1, 1, 1000.0, { -10.0,30.0,0.0 });

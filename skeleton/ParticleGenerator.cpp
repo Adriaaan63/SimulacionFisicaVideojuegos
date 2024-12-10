@@ -1,7 +1,7 @@
 #include "ParticleGenerator.h"
 #include "ParticleSystem.h"
 #include "SolidosRSystem.h"
-ParticleGenerator::ParticleGenerator(physx::PxVec3 pos, float posMax, float posMin) : pos(pos), posMax(posMax), posMin(posMin) {
+ParticleGenerator::ParticleGenerator(physx::PxVec3 pos, float posMax, float posMin) : pos(pos), posMax(posMax), posMin(posMin), isLife(true) {
 }
 ParticleGenerator::~ParticleGenerator(){
 

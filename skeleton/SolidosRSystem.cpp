@@ -1,5 +1,7 @@
 #include "SolidosRSystem.h"
-SolidosRSystem::SolidosRSystem(int maxSolidos):Systems(), maxSolidos(maxSolidos), numSolidos(0) {
+#include "ParticleSystem.h"
+
+SolidosRSystem::SolidosRSystem(int maxSolidos, ParticleSystem* pSys):Systems(), maxSolidos(maxSolidos), numSolidos(0), pSys(pSys) {
 	activeExplosion = false;
 }
 SolidosRSystem::~SolidosRSystem() {
@@ -7,6 +9,10 @@ SolidosRSystem::~SolidosRSystem() {
 		delete p;
 	}
 	solidos.clear();
+	for (auto p : proyectiles) {
+		delete p;
+	}
+	proyectiles.clear();
 	for (auto p : solidosEstaticos) {
 		delete p;
 	}
@@ -23,6 +29,11 @@ void SolidosRSystem::update(double t) {
 	for (auto fg : forceGenerators) {
 		fg->updateSolido(t, this);
 	}
+	updateObjets(t);
+	updateProyectiles(t);
+
+}
+void SolidosRSystem::updateObjets(double t) {
 	auto it = solidos.begin();
 	while (it != solidos.end()) {
 		if ((*it)->isAlive()) {
@@ -38,11 +49,34 @@ void SolidosRSystem::update(double t) {
 			numSolidos--;
 		}
 	}
-
+}
+void SolidosRSystem::updateProyectiles(double t) {
+	auto it = proyectiles.begin();
+	while (it != proyectiles.end()) {
+		if ((*it)->isAlive()) {
+			for (auto p : (*it)->getParticleGenerator()->getParticulasGenerador()) {
+				p->setVel((*it)->getSolido()->getLinearVelocity());
+				p->setInitalPose((*it)->getSolido()->getGlobalPose());
+			}
+			applyForces(*it);
+			(*it)->integrate(t);
+			++it;
+		}
+		else {
+			auto aux = it;
+			++it;
+			delete* aux;
+			proyectiles.erase(aux);
+			numSolidos--;
+		}
+	}
 }
 void SolidosRSystem::addSolido(SolidoRigido* p) {
 	numSolidos++;
 	solidos.push_back(p);
+}
+void SolidosRSystem::addProyecyiles(SolidoRigido* p) {
+	proyectiles.push_back(p);
 }
 
 void SolidosRSystem::applyForces(SolidoRigido* p) {
@@ -74,6 +108,19 @@ void SolidosRSystem::createScene(physx::PxScene* gScene, physx::PxPhysics* gPhys
 	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.6f); // Fricción y restitución
 	Piramide* piramide = new Piramide(gScene,this, material, 250.0f, 25.0f, 10.0f);
 	piramide->createPiramide();
+}
+void SolidosRSystem::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
+{
+	for (auto p : proyectiles) {
+		if (p->getSolido() == actor1 || p->getSolido() == actor2) {
+			
+			pSys->setExplosion(true);
+			pSys->createForceGenerator(new ExplosionForceGenerator(p->getSolido()->getGlobalPose().p, 150.0f, 1000000.0f, 1.0f));
+			p->getParticleGenerator()->setLife(false);
+			p->setTimeLife(-1);
+
+		}
+	}
 }
 //void SolidoRigido::generateSpringDemo() {
 //	// First one standard spring uniting 2 particles
