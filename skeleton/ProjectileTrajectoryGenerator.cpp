@@ -19,5 +19,4 @@ void ProjectileTrajectoryGenerator::generateTrajectory()
 
         t += timeStep; // Avanzar en el tiempo
     }
-    std::cout << i;
 }

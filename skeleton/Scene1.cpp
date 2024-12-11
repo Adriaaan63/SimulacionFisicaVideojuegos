@@ -14,7 +14,7 @@ Scene1::~Scene1()
 }
 void Scene1::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 {
-	for (auto p : solidSys->getProyectiles()) {
+	for (auto& p : solidSys->getProyectiles()) {
 		if (p->getSolido() == actor1 || p->getSolido() == actor2) {
 
 			parSys->setExplosion(true);
@@ -32,10 +32,15 @@ void Scene1::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor
 void Scene1::createScene()
 {
 	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.5f); // Fricción y restitución
-	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(25, 1000, 5000), { 0,-1000,0 }, material);
+	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(25, 1000, 5000), { 0,-1000,0 }, material, Vector4(1.0f,0,0,1));
+	creteSuelo(gScene, &physx::PxBoxGeometry(5000, 100, 5000), { 0,-500,0 }, material, Vector4(0.63f, 0.6f, 0.38f, 1));
 	solidSys->createScene(gScene, gPhysics);
 }
-
+void Scene1::creteSuelo(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
+{
+	suelo = new SolidosEstaticos(gScene, geo, transform, material, color);
+	gScene->addActor(*suelo->getSolido());
+}
 void Scene1::createTrayectoria() {
 	// Obtener la posición y velocidad del proyectil desde la cámara
 	physx::PxVec3 initialPos = GetCamera()->getTransform().p;
@@ -61,9 +66,11 @@ void Scene1::createProyectil() {
 	parSys->createGenerator(generator, 0.01, { 0,0,1,1 });
 
 	gScene->addActor(*s->getSolido());
+	solidSys->setTiros();
 }
 
 void Scene1::Update(double t) {
+	
 	if (solidSys->getProyectiles().size() >= 1) {
 		canDrawTray = false;
 	}

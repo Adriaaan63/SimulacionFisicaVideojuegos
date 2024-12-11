@@ -32,8 +32,8 @@ public:
         for (auto& p : particlesTrayec) {
             p->setTimeLife(-1);
         }
-        /*particlesTrayec.clear();
-        renderItems.clear();*/
+        particlesTrayec.clear();
+        renderItems.clear();
     }
     // Métodos para actualizar posición y velocidad
     void setPosition(const physx::PxVec3& newPos) { pos = newPos; }

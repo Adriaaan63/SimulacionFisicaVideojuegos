@@ -20,6 +20,7 @@ public:
 	ProjectileTrajectoryGenerator* getTrayectGen() const { return trajectoryGen; }
 
 	void createProyectil();
+	SolidosRSystem* getSolidSys() const { return solidSys; };
 private:
 	PxPhysics* gPhysics;
 	PxScene* gScene;
@@ -29,9 +30,12 @@ private:
 	ProjectileTrajectoryGenerator* trajectoryGen;
 
 	void createScene();
+	void creteSuelo(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
 	void createTrayectoria();
 	
 	bool canDrawTray;
+	SolidosEstaticos* suelo;
+	
 	
 };
 

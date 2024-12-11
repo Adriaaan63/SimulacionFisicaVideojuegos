@@ -47,6 +47,7 @@ void SolidosRSystem::updateObjets(double t) {
 			delete* aux;
 			solidos.erase(aux);
 			numSolidos--;
+			puntos += 100;
 		}
 	}
 }
@@ -98,9 +99,9 @@ void SolidosRSystem::applyForces(SolidoRigido* p) {
 	if(totalForce.normalize() > 0)
 	p->getSolido()->addForce(totalForce,physx::PxForceMode::eFORCE);
 }
-void SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material)
+void SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
 {
-	SolidosEstaticos* newsolidoEstatico = new SolidosEstaticos(gScene, geo, transform, material);
+	SolidosEstaticos* newsolidoEstatico = new SolidosEstaticos(gScene, geo, transform, material, color);
 	solidosEstaticos.push_back(newsolidoEstatico);
 	gScene->addActor(*newsolidoEstatico->getSolido());
 }

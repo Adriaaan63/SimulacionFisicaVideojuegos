@@ -26,6 +26,7 @@
 #include "Scene1.h"
 
 std::string display_text = "This is a test";
+std::string display_text1 = "This is a test";
 
 
 using namespace physx;
@@ -164,12 +165,17 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
+	//drawText("Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos()), 20, 200);
+	display_text = "Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos());
+	display_text1 = "Tiros: " + std::to_string(scene1->getSolidSys()->getTiros());
+
+	scene1->Update(t);
+	canDrawTray = scene1->getCanDrawTray();
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 	
-	scene1->Update(t);
-	canDrawTray = scene1->getCanDrawTray();
+	
 	
 	
 }
@@ -209,7 +215,8 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'P':
-		scene1->createProyectil();
+		if(scene1->getSolidSys()->getTiros() > 0)
+			scene1->createProyectil();
 		
 		break;
 	/*case 'H':

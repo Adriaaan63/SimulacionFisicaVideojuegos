@@ -20,6 +20,7 @@ protected:
 	int maxSolidos;
 	int numSolidos;
 	
+	
 	/*std::list<ParticleGenerator*> generators;
 	std::list<ForceGenerator*> forceGenerators;*/
 public:
@@ -56,10 +57,17 @@ public:
 	BuoyancyForceGenerator* getFgFlot() const { return f4; };*/
 
 	void createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo,
-		physx::PxTransform transform, physx::PxMaterial* material);
+		physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
 	void createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics);
+
+	int getPuntos() const { return puntos; };
+	int getTiros() const { return tiros; };
+	void setTiros() { 
+		tiros-=1; };
 private:
 	bool activeExplosion;
+	int puntos = 0;
+	int tiros = 3;
 	/*AnchoredSpringFG* f3;
 	BuoyancyForceGenerator* f4;*/
 };

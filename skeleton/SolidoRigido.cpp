@@ -80,7 +80,7 @@ void SolidoRigido::setUpdateSolid(double inercia)
 	physx::PxRigidBodyExt::setMassAndUpdateInertia(*newSolid, inercia);
 }
 bool SolidoRigido::isAlive() {
-	if (timeLife < 0 )
+	if (timeLife < 0 || newSolid->getGlobalPose().p.y < -300)
 		return false;
 	else
 	{

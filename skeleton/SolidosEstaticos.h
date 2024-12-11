@@ -7,7 +7,7 @@ private:
 public:
 	SolidosEstaticos() {};
 	SolidosEstaticos(physx::PxScene* gScene, physx::PxGeometry* geo,
-		physx::PxTransform transform, physx::PxMaterial* material);
+		physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
 	SolidosEstaticos(SolidosEstaticos& const s);
 	SolidosEstaticos& operator=(const SolidosEstaticos& p) {
 		newSolid = p.newSolid;
