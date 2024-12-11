@@ -14,6 +14,8 @@ Particle* NormalGenerator::generateParticle() {
 	p->setPose(physx::PxTransform(calculatePosicion()));
 	p->setRadius(radius);
 	p->setTimeLife(timeLifeParticle);
+	p->setMass(Random(particleModel.getMass(), particleModel.getMass() + 0.15f));
+	p->getRenderItem()->color = Vector4(Random(0.8, 1), Random(0.0, 1), 0, 0);
 	particulasGenerador.push_back(p);
 	return p;
 }

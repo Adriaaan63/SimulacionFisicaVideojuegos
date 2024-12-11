@@ -1,7 +1,7 @@
 #include "SolidosRSystem.h"
 #include "ParticleSystem.h"
 
-SolidosRSystem::SolidosRSystem(int maxSolidos, ParticleSystem* pSys):Systems(), maxSolidos(maxSolidos), numSolidos(0), pSys(pSys) {
+SolidosRSystem::SolidosRSystem(int maxSolidos):Systems(), maxSolidos(maxSolidos), numSolidos(0) {
 	activeExplosion = false;
 }
 SolidosRSystem::~SolidosRSystem() {
@@ -63,6 +63,7 @@ void SolidosRSystem::updateProyectiles(double t) {
 			++it;
 		}
 		else {
+			(*it)->getParticleGenerator()->setLife(false);
 			auto aux = it;
 			++it;
 			delete* aux;
@@ -105,23 +106,11 @@ void SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeome
 }
 void SolidosRSystem::createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics)
 {
-	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.6f); // Fricción y restitución
+	physx::PxMaterial* material = gPhysics->createMaterial(0, 0.5f, 0.5f); // Fricción y restitución
 	Piramide* piramide = new Piramide(gScene,this, material, 250.0f, 25.0f, 10.0f);
 	piramide->createPiramide();
 }
-void SolidosRSystem::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
-{
-	for (auto p : proyectiles) {
-		if (p->getSolido() == actor1 || p->getSolido() == actor2) {
-			
-			pSys->setExplosion(true);
-			pSys->createForceGenerator(new ExplosionForceGenerator(p->getSolido()->getGlobalPose().p, 150.0f, 1000000.0f, 1.0f));
-			p->getParticleGenerator()->setLife(false);
-			p->setTimeLife(-1);
 
-		}
-	}
-}
 //void SolidoRigido::generateSpringDemo() {
 //	// First one standard spring uniting 2 particles
 //	Particle* p1 = new Particle({ -10.0,10.0,0.0 }, { 0.0,0.0,0.0 }, Vector4(1, 1, 1, 1), 60.0f, { 0.0,0.0,0.0 }, 0.85);

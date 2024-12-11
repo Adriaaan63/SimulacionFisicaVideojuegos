@@ -32,6 +32,7 @@
     <ClCompile Include="SolidosEstaticos.cpp" />
     <ClCompile Include="Piramide.cpp" />
     <ClCompile Include="ProjectileTrajectoryGenerator.cpp" />
+    <ClCompile Include="Scene1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="SolidosEstaticos.h" />
     <ClInclude Include="Piramide.h" />
     <ClInclude Include="ProjectileTrajectoryGenerator.h" />
+    <ClInclude Include="Scene1.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

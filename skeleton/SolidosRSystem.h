@@ -23,7 +23,7 @@ protected:
 	/*std::list<ParticleGenerator*> generators;
 	std::list<ForceGenerator*> forceGenerators;*/
 public:
-	SolidosRSystem(int maxSolidos, ParticleSystem* pSys);
+	SolidosRSystem(int maxSolidos);
 	~SolidosRSystem();
 
 	virtual void update(double t);
@@ -43,6 +43,7 @@ public:
 	void addSolido(SolidoRigido* p);
 
 	void addProyecyiles(SolidoRigido* p);
+	std::list<SolidoRigido*> getProyectiles() const { return proyectiles; };
 
 	void applyForces(SolidoRigido* p);
 
@@ -57,10 +58,8 @@ public:
 	void createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo,
 		physx::PxTransform transform, physx::PxMaterial* material);
 	void createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics);
-	void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2);
 private:
 	bool activeExplosion;
-	ParticleSystem* pSys;
 	/*AnchoredSpringFG* f3;
 	BuoyancyForceGenerator* f4;*/
 };

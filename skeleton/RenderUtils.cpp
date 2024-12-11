@@ -22,6 +22,8 @@ __int64 CounterStart = 0;
 __int64 CounterLast = 0;
 
 extern bool canUseCalbacks;
+extern bool canDrawTray;
+
 extern ProjectileTrajectoryGenerator* trajectoryGen;
 
 void StartCounter()
@@ -53,17 +55,19 @@ namespace
 void motionCallback(int x, int y)
 {
 	sCamera->handleMotion(x, y);
-	// Actualizar posición y velocidad inicial basadas en la cámara
-	if (trajectoryGen != nullptr) {
-		PxVec3 cameraPos = sCamera->getTransform().p; // Posición actual de la cámara
-		PxVec3 cameraDir = sCamera->getDir() * 200;   // Dirección de la cámara, escalada para simular velocidad inicial
+	if (canDrawTray) {
+		// Actualizar posición y velocidad inicial basadas en la cámara
+		if (trajectoryGen != nullptr) {
+			PxVec3 cameraPos = sCamera->getTransform().p; // Posición actual de la cámara
+			PxVec3 cameraDir = sCamera->getDir() * 200;   // Dirección de la cámara, escalada para simular velocidad inicial
 
-		// Actualizar posición y velocidad inicial del generador de trayectoria
-		trajectoryGen->setPosition(cameraPos);
-		trajectoryGen->setVelocity(cameraDir);
+			// Actualizar posición y velocidad inicial del generador de trayectoria
+			trajectoryGen->setPosition(cameraPos);
+			trajectoryGen->setVelocity(cameraDir);
 
-		// Generar nueva trayectoria
-		trajectoryGen->generateTrajectory();
+			// Generar nueva trayectoria
+			trajectoryGen->generateTrajectory();
+		}
 	}
 }
 

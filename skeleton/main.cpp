@@ -23,6 +23,7 @@
 #include "SolidoRigido.h"
 #include "SolidosRSystem.h"
 #include "ProjectileTrajectoryGenerator.h"
+#include "Scene1.h"
 
 std::string display_text = "This is a test";
 
@@ -47,25 +48,15 @@ RenderItem* obj = NULL;
 RenderItem* obj1 = NULL;
 RenderItem* obj2 = NULL;
 RenderItem* obj3 = NULL;
-std::vector<Particle*> proyectiles;
-ParticleSystem* ParticleSys;
-SolidosRSystem* SolidoSys;
-
+//std::vector<Particle*> proyectiles;
+//ParticleSystem* ParticleSys;
+//SolidosRSystem* SolidoSys;
 ProjectileTrajectoryGenerator* trajectoryGen;
+Scene1* scene1;
+
 
 bool canUseCalbacks;
-void createTrayectoria() {
-	// Obtener la posición y velocidad del proyectil desde la cámara
-	physx::PxVec3 initialPos = GetCamera()->getTransform().p;
-	physx::PxVec3 initialVel = GetCamera()->getDir() * 200;
-
-	// Crear un generador de trayectoria
-	trajectoryGen = new ProjectileTrajectoryGenerator(initialPos, initialVel, 0.1f, 5.0f, ParticleSys);
-
-	// Generar y visualizar la trayectoria
-	trajectoryGen->generateTrajectory();
-
-}
+bool canDrawTray;
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -96,7 +87,7 @@ void initPhysics(bool interactive)
 	Vector3D<float> ejeZ(0.0f, 0.0, distanceEje);
 	PxShape* shape3 = CreateShape(PxSphereGeometry(1), gMaterial);
 	obj3 = new RenderItem(shape3, new PxTransform(ejeZ.x, ejeZ.y, ejeZ.z), Vector4(0, 0, 1, 1));
-
+	
 	/*particle = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0,5,0), 0.99);*/
 	
 
@@ -109,8 +100,8 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	ParticleSys = new ParticleSystem();
-	SolidoSys = new SolidosRSystem(10, ParticleSys);
+	/*ParticleSys = new ParticleSystem();
+	SolidoSys = new SolidosRSystem(10);*/
 
 	
 #pragma region Practica
@@ -157,9 +148,8 @@ void initPhysics(bool interactive)
 	//------------------------------Proyecto----------------------------------------------
 	canUseCalbacks = false;
 	
-	SolidoSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(25, 1000, 5000), { 0,-1000,0 }, gMaterial);
-	SolidoSys->createScene(gScene, gPhysics);
-	createTrayectoria();
+	scene1 = new Scene1(gPhysics, gScene);
+	trajectoryGen = scene1->getTrayectGen();
 	//------------------------------------------------------------------------------------
 #pragma endregion
 
@@ -178,13 +168,9 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 	
-
-	/*particle->integrate(t);*/
-	for (auto& e : proyectiles) {
-		e->integrate(t);
-	}
-	ParticleSys->update(t);
-	SolidoSys->update(t);
+	scene1->Update(t);
+	canDrawTray = scene1->getCanDrawTray();
+	
 	
 }
 
@@ -193,7 +179,7 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
-
+	delete scene1;
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
 	gDispatcher->release();
@@ -214,22 +200,7 @@ void cleanupPhysics(bool interactive)
 	}
 	proyectiles.clear();*/
 }
-void createProyectil() {
-	// Crear un generador de partículas para el sólido
-	/*ParticleGenerator* generator = new NormalGenerator(GetCamera()->getTransform().p,
-		0.5f, 2.0f, 0.1f, 0.1f,
-		{ 0, 5, 0 }, { 1, 1, 1 });*/
-	
-	SolidoRigido* s = new SolidoRigido(gScene, &physx::PxSphereGeometry(8),
-		GetCamera()->getTransform(), GetCamera()->getDir() * 200,
-		{ 0, 0, 0 }, 0.2f, gMaterial,INT_MAX);
-	ParticleGenerator* generator = new NormalGenerator(s->getPose().p, s->getShape()->getGeometry().sphere().radius* 100, 10, 20, 0, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2));
-	s->setParticleGenerator(generator);
-	SolidoSys->addProyecyiles(s);
-	ParticleSys->createGenerator(generator, 0.01, { 0,0,1,1 });
-	
-	gScene->addActor(*s->getSolido());
-}
+
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
 {
@@ -238,15 +209,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'P':
-
-		trajectoryGen->clearTrajectory();
-		createProyectil();
+		scene1->createProyectil();
 		
 		break;
-	case 'H':
+	/*case 'H':
 		ParticleSys->setExplosion(true);
 		ParticleSys->createForceGenerator(new ExplosionForceGenerator(physx::PxVec3(0,0,0), 150.0f, 1000000.0f, 1.0f));
-		break;
+		break;*/
 	/*case 'E':
 		ParticleSys->setKSpringFG(50);
 		break;
@@ -275,7 +244,7 @@ void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 {
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
-	SolidoSys->onCollision(actor1, actor2);
+	scene1->onCollision(actor1, actor2);
 }
 
 

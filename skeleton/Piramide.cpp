@@ -13,7 +13,7 @@ void Piramide::createPiramide() {
             physx::PxTransform transform({0, startY,  offsetX + i * (blockSize + separation) }); // Solo en XZ
             physx::PxBoxGeometry geometry(blockSize / 2, blockSize / 2, blockSize / 2);
 
-            auto solid = new SolidoRigido(gScene, &geometry, transform, { 0,5,0 }, { 0,0,0 }, 0.5f, material, INT_MAX);
+            auto solid = new SolidoRigido(gScene, &geometry, transform, { 0,5,0 }, { 0,0,0 }, 0.1f, material, INT_MAX);
             gScene->addActor(*solid->getSolido());
             sistemaSolidos->addSolido(solid);
         }

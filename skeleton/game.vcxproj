@@ -270,6 +270,7 @@
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="NormalGenerator.cpp" />
+    <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="SolidoRigido.cpp" />
     <ClCompile Include="Solidos.cpp" />
     <ClCompile Include="SolidosEstaticos.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="NormalGenerator.h" />
+    <ClInclude Include="Scene1.h" />
     <ClInclude Include="SolidoRigido.h" />
     <ClInclude Include="Solidos.h" />
     <ClInclude Include="SolidosEstaticos.h" />
