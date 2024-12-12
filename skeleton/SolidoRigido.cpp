@@ -2,7 +2,7 @@
 #include "ParticleGenerator.h"
 SolidoRigido::SolidoRigido(physx::PxScene* sc, physx::PxGeometry* geo, 
     physx::PxTransform transform, physx::PxVec3 linVel, physx::PxVec3 angVel, 
-    float mass, physx::PxMaterial* material, float time) : Solidos(sc,geo,transform,material),
+    float mass, physx::PxMaterial* material, Vector4 color,float time) : Solidos(sc,geo,transform,material),
  timeLife(time)
 {
 	newSolid = gScene->getPhysics().createRigidDynamic(transform);
@@ -12,13 +12,13 @@ SolidoRigido::SolidoRigido(physx::PxScene* sc, physx::PxGeometry* geo,
 	Vector3 inertiaTensor = calculateInertiaTensor(mass);
 	newSolid->setMassSpaceInertiaTensor(inertiaTensor);
 	newSolid->setMass(mass);
-	renderItem = new RenderItem(shape, newSolid, { 0.8,0.8,0.8,1 });
+	renderItem = new RenderItem(shape, newSolid, color);
 }
 SolidoRigido::SolidoRigido(SolidoRigido& const p) {
 	*this = p;
 }
 SolidoRigido::SolidoRigido(PxScene* scene, PxGeometry* geometry, PxTransform pose, PxVec3 linVel, PxVec3 angVel,
-    float mass, PxMaterial* material, ParticleGenerator* generator)
+    float mass, PxMaterial* material, Vector4 color, ParticleGenerator* generator)
     : Solidos(scene, geometry, pose, material), particleGenerator(generator) {
     newSolid = gScene->getPhysics().createRigidDynamic(pose);
     newSolid->setLinearVelocity(linVel);
@@ -27,7 +27,7 @@ SolidoRigido::SolidoRigido(PxScene* scene, PxGeometry* geometry, PxTransform pos
     Vector3 inertiaTensor = calculateInertiaTensor(mass);
     newSolid->setMassSpaceInertiaTensor(inertiaTensor);
     newSolid->setMass(mass);
-    renderItem = new RenderItem(shape, newSolid, { 0.8,0.8,0.8,1 });
+    renderItem = new RenderItem(shape, newSolid, color);
     if (particleGenerator) {
         particleGenerator->setPose(pose); // Ajustar posición inicial
     }

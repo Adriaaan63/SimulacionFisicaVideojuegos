@@ -118,11 +118,12 @@ void SolidosRSystem::applyForces(SolidoRigido* p) {
 	if(totalForce.normalize() > 0)
 	p->getSolido()->addForce(totalForce,physx::PxForceMode::eFORCE);
 }
-void SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
+SolidosEstaticos* SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
 {
 	SolidosEstaticos* newsolidoEstatico = new SolidosEstaticos(gScene, geo, transform, material, color);
 	solidosEstaticos.push_back(newsolidoEstatico);
 	gScene->addActor(*newsolidoEstatico->getSolido());
+	return newsolidoEstatico;
 
 }
 void SolidosRSystem::createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics)
@@ -131,6 +132,7 @@ void SolidosRSystem::createScene(physx::PxScene* gScene, physx::PxPhysics* gPhys
 	Piramide* piramide = new Piramide(gScene,this, material, 250.0f, 25.0f, 10.0f);
 	piramide->createPiramide();
 }
+
 
 //void SolidoRigido::generateSpringDemo() {
 //	// First one standard spring uniting 2 particles

@@ -33,6 +33,10 @@
     <ClCompile Include="Piramide.cpp" />
     <ClCompile Include="ProjectileTrajectoryGenerator.cpp" />
     <ClCompile Include="Scene1.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene2.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PatosGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -68,6 +72,10 @@
     <ClInclude Include="Piramide.h" />
     <ClInclude Include="ProjectileTrajectoryGenerator.h" />
     <ClInclude Include="Scene1.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene2.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PatosGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

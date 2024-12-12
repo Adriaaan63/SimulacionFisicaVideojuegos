@@ -56,7 +56,7 @@ public:
 	}
 	BuoyancyForceGenerator* getFgFlot() const { return f4; };*/
 
-	void createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo,
+	SolidosEstaticos* createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo,
 		physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
 	void createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics);
 

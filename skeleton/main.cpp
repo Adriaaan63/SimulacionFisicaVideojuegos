@@ -24,6 +24,7 @@
 #include "SolidosRSystem.h"
 #include "ProjectileTrajectoryGenerator.h"
 #include "Scene1.h"
+#include "Scene2.h"
 
 std::string display_text = "This is a test";
 std::string display_text1 = "This is a test";
@@ -54,6 +55,7 @@ RenderItem* obj3 = NULL;
 //SolidosRSystem* SolidoSys;
 ProjectileTrajectoryGenerator* trajectoryGen;
 Scene1* scene1;
+Scene2* scene2;
 
 
 bool canUseCalbacks;
@@ -148,9 +150,11 @@ void initPhysics(bool interactive)
 #pragma region Proyecto
 	//------------------------------Proyecto----------------------------------------------
 	canUseCalbacks = false;
-	
-	scene1 = new Scene1(gPhysics, gScene);
-	trajectoryGen = scene1->getTrayectGen();
+	GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
+	GetCamera()->scene = 2;
+	scene2 = new Scene2(gPhysics, gScene);
+	/*scene1 = new Scene1(gPhysics, gScene);
+	trajectoryGen = scene1->getTrayectGen();*/
 	//------------------------------------------------------------------------------------
 #pragma endregion
 
@@ -165,12 +169,13 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	//drawText("Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos()), 20, 200);
-	display_text = "Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos());
-	display_text1 = "Tiros: " + std::to_string(scene1->getSolidSys()->getTiros());
+	
+	//display_text = "Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos());
+	//display_text1 = "Tiros: " + std::to_string(scene1->getSolidSys()->getTiros());
 
-	scene1->Update(t);
-	canDrawTray = scene1->getCanDrawTray();
+	//scene1->Update(t);
+	scene2->Update(t);
+	//canDrawTray = scene1->getCanDrawTray();
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -185,7 +190,7 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
-	delete scene1;
+	//delete scene1;
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
 	gDispatcher->release();
@@ -214,10 +219,22 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'P':
+	/*case 'P':
 		if(scene1->getSolidSys()->getTiros() > 0)
 			scene1->createProyectil();
 		
+		break;*/
+	case 'W':
+		scene2->setPlayerPos(PxVec3(-2,0,0));
+		break;
+	case 'A':
+		scene2->setPlayerPos(PxVec3(0, 0, 2));
+		break;
+	case 'S':
+		scene2->setPlayerPos(PxVec3(2, 0, 0));
+		break;
+	case 'D':
+		scene2->setPlayerPos(PxVec3(0, 0, -2));
 		break;
 	/*case 'H':
 		ParticleSys->setExplosion(true);
@@ -251,7 +268,7 @@ void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 {
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
-	scene1->onCollision(actor1, actor2);
+	//scene1->onCollision(actor1, actor2);
 }
 
 

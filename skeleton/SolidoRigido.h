@@ -15,7 +15,7 @@ private:
 public:
 	SolidoRigido() {};
 	SolidoRigido(physx::PxScene* gScene,physx::PxGeometry* geo,physx::PxTransform transform,
-		physx::PxVec3 linVel, physx::PxVec3 angVel, float mass, physx::PxMaterial* material, float time = 20);
+		physx::PxVec3 linVel, physx::PxVec3 angVel, float mass, physx::PxMaterial* material, Vector4 color, float time = 20);
 	SolidoRigido(SolidoRigido& const s);
 	SolidoRigido& operator=(const SolidoRigido& p) {
 		newSolid = p.newSolid;
@@ -24,7 +24,7 @@ public:
 		return *this;
 	}
 	SolidoRigido(PxScene* scene, PxGeometry* geometry, PxTransform pose, PxVec3 vel, PxVec3 acc,
-		float masa, PxMaterial* material, ParticleGenerator* generator = nullptr);
+		float masa, PxMaterial* material, Vector4 color, ParticleGenerator* generator = nullptr);
 
 	~SolidoRigido() {
 		newSolid->release();

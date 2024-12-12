@@ -62,10 +62,10 @@ bool Camera::handleKey(unsigned char key, int x, int y, float speed, bool canUse
         PxVec3 viewY = mDir.cross(PxVec3(0, 1, 0)).getNormalized();
         switch (toupper(key))
         {
-        case 'W':	mEye += mDir * 2.0f * speed;		break;
-        case 'S':	mEye -= mDir * 2.0f * speed;		break;
-        case 'A':	mEye -= viewY * 2.0f * speed;		break;
-        case 'D':	mEye += viewY * 2.0f * speed;		break;
+        case '1':	mEye += mDir * 2.0f * speed;		break;
+        case '2':	mEye -= mDir * 2.0f * speed;		break;
+        case '3':	mEye -= viewY * 2.0f * speed;		break;
+        case '4':	mEye += viewY * 2.0f * speed;		break;
         default:							return false;
         }
         return true;
@@ -83,50 +83,68 @@ void Camera::handleAnalogMove(float x, float y)
 
 void Camera::handleMotion(int x, int y)
 {
-    int dx = mMouseX - x;
-    int dy = mMouseY - y;
+    if (scene == 1) {
+        int dx = mMouseX - x;
+        int dy = mMouseY - y;
 
-    // Ángulos máximos permitidos en los ejes (en radianes)
-    const float maxVerticalAngle = PxPi / 10.0f;  // 45 grados
-    const float maxHorizontalAngle = PxPi / 8.0f; // 90 grados
+        // Ángulos máximos permitidos en los ejes (en radianes)
+        const float maxVerticalAngle = PxPi / 10.0f;  // 45 grados
+        const float maxHorizontalAngle = PxPi / 8.0f; // 90 grados
 
-    // Variables estáticas para mantener el estado del ángulo acumulado
-    static float currentVerticalAngle = 0.0f;
-    static float currentHorizontalAngle = 0.0f;
+        // Variables estáticas para mantener el estado del ángulo acumulado
+        static float currentVerticalAngle = 0.0f;
+        static float currentHorizontalAngle = 0.0f;
 
-    // Calcular rotación horizontal (giro izquierda/derecha)
-    float horizontalDelta = PxPi * dx / 180.0f;
-    float newHorizontalAngle = currentHorizontalAngle + horizontalDelta;
+        // Calcular rotación horizontal (giro izquierda/derecha)
+        float horizontalDelta = PxPi * dx / 180.0f;
+        float newHorizontalAngle = currentHorizontalAngle + horizontalDelta;
 
-    // Restringir el ángulo horizontal
-    if (newHorizontalAngle > maxHorizontalAngle)
-        horizontalDelta = maxHorizontalAngle - currentHorizontalAngle;
-    else if (newHorizontalAngle < -maxHorizontalAngle)
-        horizontalDelta = -maxHorizontalAngle - currentHorizontalAngle;
+        // Restringir el ángulo horizontal
+        if (newHorizontalAngle > maxHorizontalAngle)
+            horizontalDelta = maxHorizontalAngle - currentHorizontalAngle;
+        else if (newHorizontalAngle < -maxHorizontalAngle)
+            horizontalDelta = -maxHorizontalAngle - currentHorizontalAngle;
 
-    currentHorizontalAngle += horizontalDelta;
-    PxQuat qx(horizontalDelta, PxVec3(0, 1, 0));
+        currentHorizontalAngle += horizontalDelta;
+        PxQuat qx(horizontalDelta, PxVec3(0, 1, 0));
 
-    // Calcular rotación vertical (giro arriba/abajo)
-    float verticalDelta = PxPi * dy / 180.0f;
-    float newVerticalAngle = currentVerticalAngle + verticalDelta;
+        // Calcular rotación vertical (giro arriba/abajo)
+        float verticalDelta = PxPi * dy / 180.0f;
+        float newVerticalAngle = currentVerticalAngle + verticalDelta;
 
-    // Restringir el ángulo vertical
-    if (newVerticalAngle > maxVerticalAngle)
-        verticalDelta = maxVerticalAngle - currentVerticalAngle;
-    else if (newVerticalAngle < -maxVerticalAngle)
-        verticalDelta = -maxVerticalAngle - currentVerticalAngle;
+        // Restringir el ángulo vertical
+        if (newVerticalAngle > maxVerticalAngle)
+            verticalDelta = maxVerticalAngle - currentVerticalAngle;
+        else if (newVerticalAngle < -maxVerticalAngle)
+            verticalDelta = -maxVerticalAngle - currentVerticalAngle;
 
-    currentVerticalAngle += verticalDelta;
-    PxVec3 viewY = mDir.cross(PxVec3(0, 1, 0)).getNormalized();
-    PxQuat qy(verticalDelta, viewY);
+        currentVerticalAngle += verticalDelta;
+        PxVec3 viewY = mDir.cross(PxVec3(0, 1, 0)).getNormalized();
+        PxQuat qy(verticalDelta, viewY);
 
-    // Aplicar las rotaciones restringidas
-    mDir = qy.rotate(qx.rotate(mDir)).getNormalized();
+        // Aplicar las rotaciones restringidas
+        mDir = qy.rotate(qx.rotate(mDir)).getNormalized();
 
-    // Actualizar las coordenadas del ratón
-    mMouseX = x;
-    mMouseY = y;
+        // Actualizar las coordenadas del ratón
+        mMouseX = x;
+        mMouseY = y;
+    }
+    else if (scene == 2) {
+        int dx = mMouseX - x;
+        int dy = mMouseY - y;
+
+        PxVec3 viewY = mDir.cross(PxVec3(0, 1, 0)).getNormalized();
+
+        PxQuat qx(PxPi * dx / 180.0f, PxVec3(0, 1, 0));
+        mDir = qx.rotate(mDir);
+        PxQuat qy(PxPi * dy / 180.0f, viewY);
+        mDir = qy.rotate(mDir);
+
+        mDir.normalize();
+
+        mMouseX = x;
+        mMouseY = y;
+    }
 }
 
 
@@ -139,6 +157,12 @@ PxTransform Camera::getTransform() const
 
 	PxMat33 m(mDir.cross(viewY), viewY, -mDir);
 	return PxTransform(mEye, PxQuat(m));
+}
+
+void Camera::setTransform(physx::PxVec3 newTransform, physx::PxVec3 dir)
+{
+    mEye = newTransform;
+    mDir = dir.getNormalized();
 }
 
 PxVec3 Camera::getEye() const

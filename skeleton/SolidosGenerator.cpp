@@ -25,7 +25,7 @@ SolidoRigido* SolidosGenerator::generateSolidoRigido()
         physx::PxTransform(Vector3(0, Random(pos.y - 50, pos.y + 50), 0)),
         { 0, 5, 0 },
         { 0, 0, 0 },
-        Random(0.2f, 0.4f), material, INT_MAX);
+        Random(0.2f, 0.4f), material, { 1,1,1,1 }, INT_MAX);
 
 
     // Configurar el sólido en la escena
