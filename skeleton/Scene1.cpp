@@ -59,7 +59,7 @@ void Scene1::createProyectil() {
 	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.5f);
 	SolidoRigido* s = new SolidoRigido(gScene, &physx::PxSphereGeometry(8),
 		GetCamera()->getTransform(), GetCamera()->getDir() * 200,
-		{ 0, 0, 0 }, 0.2f, material, { 0,0,0,1 }, 5);
+		{ 0, 0, 0 }, 0.2f, material, { 1,1,1,1 }, 5);
 	ParticleGenerator* generator = new NormalGenerator(s->getPose().p, s->getShape()->getGeometry().sphere().radius , 2, 10, 10, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2));
 	s->setParticleGenerator(generator);
 	solidSys->addProyecyiles(s);
