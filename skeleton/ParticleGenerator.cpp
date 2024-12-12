@@ -4,10 +4,11 @@
 ParticleGenerator::ParticleGenerator(physx::PxVec3 pos, float posMax, float posMin) : pos(pos), posMax(posMax), posMin(posMin), isLife(true) {
 }
 ParticleGenerator::~ParticleGenerator(){
-
+    particulasGenerador.clear();
 }
 void ParticleGenerator::update(double t, ParticleSystem* prSys) {
 	prSys->addParticle(generateParticle());
+    cleanUpParticles();
 
 }
 void ParticleGenerator::updateSolid(double t, SolidosRSystem* prSys) {
@@ -16,6 +17,20 @@ void ParticleGenerator::updateSolid(double t, SolidosRSystem* prSys) {
         prSys->addSolido(s);
 
 }
+void ParticleGenerator::cleanUpParticles() {
+    auto it = particulasGenerador.begin();
+    while (it != particulasGenerador.end()) {
+        if (!(*it)->isAlive()) {
+            auto aux = it;
+            ++it;
+            particulasGenerador.erase(aux); // Elimina de la lista y avanza
+        }
+        else {
+            ++it;
+        }
+    }
+}
+
 physx::PxVec3 ParticleGenerator::calculatePosicion() {
     static std::default_random_engine generator;
     std::uniform_real_distribution<float> distributionX(pos.x - posMin, pos.x + posMax);

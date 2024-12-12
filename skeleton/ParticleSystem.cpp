@@ -3,8 +3,11 @@ ParticleSystem::ParticleSystem():Systems() {
 	activeExplosion = false;
 }
 ParticleSystem::~ParticleSystem() {
-	for (auto p : particles) {
-		delete p;
+	for (auto& p : particles) {
+		if (p != nullptr) {
+			delete p;
+			p = nullptr;
+		}
 	}
 	particles.clear();
 }

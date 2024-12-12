@@ -40,6 +40,7 @@ Particle::Particle(Particle&const p) {
 Particle::~Particle(){
 	if(renderItem != nullptr)
 		DeregisterRenderItem(renderItem);
+
 }
 void Particle::createRenderItem(physx::PxGeometryType::Enum type, physx::PxVec3 tam) {
 	if (type == physx::PxGeometryType::eSPHERE) {

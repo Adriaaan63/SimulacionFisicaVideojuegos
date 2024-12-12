@@ -10,10 +10,10 @@ public:
     }
 
     ~ProjectileTrajectoryGenerator() {
-        for (auto& item : renderItems) {
-            delete item; // Liberar memoria de los RenderItems.
-        }
-        renderItems.clear();
+        //for (auto& item : renderItems) {
+        //    delete item; // Liberar memoria de los RenderItems.
+        //}
+        //renderItems.clear();
     }
 
     // No generamos partículas ni sólidos, solo trayectorias visuales

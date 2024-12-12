@@ -15,6 +15,7 @@ public:
 
 	void update(double t, ParticleSystem* prSys);
 	void updateSolid(double t, SolidosRSystem* prSys);
+	void cleanUpParticles();
 	virtual Particle* generateParticle() = 0;
 	physx::PxVec3 getPose() const {
 		return pos;

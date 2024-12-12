@@ -5,16 +5,26 @@ SolidosRSystem::SolidosRSystem(int maxSolidos):Systems(), maxSolidos(maxSolidos)
 	activeExplosion = false;
 }
 SolidosRSystem::~SolidosRSystem() {
-	for (auto p : solidos) {
-		delete p;
+	for (auto& p : solidos) {
+		if (p != nullptr) {
+			delete p;
+			p = nullptr;
+		}
 	}
+
 	solidos.clear();
-	for (auto p : proyectiles) {
-		delete p;
+	for (auto& p : proyectiles) {
+		if (p != nullptr) {
+			delete p;
+			p = nullptr;
+		}
 	}
 	proyectiles.clear();
-	for (auto p : solidosEstaticos) {
-		delete p;
+	for (auto& p : solidosEstaticos) {
+		if (p != nullptr) {
+			delete p;
+			p = nullptr;
+		}
 	}
 	solidosEstaticos.clear();
 }
@@ -55,10 +65,19 @@ void SolidosRSystem::updateProyectiles(double t) {
 	auto it = proyectiles.begin();
 	while (it != proyectiles.end()) {
 		if ((*it)->isAlive()) {
-			for (auto p : (*it)->getParticleGenerator()->getParticulasGenerador()) {
-				p->setVel((*it)->getSolido()->getLinearVelocity());
-				p->setInitalPose((*it)->getSolido()->getGlobalPose());
+			if ((*it)->getParticleGenerator() != nullptr) {
+				for (auto& p : (*it)->getParticleGenerator()->getParticulasGenerador()) {
+					if (p != nullptr) {
+						p->setVel((*it)->getSolido()->getLinearVelocity());
+						p->setInitalPose((*it)->getSolido()->getGlobalPose());
+					}
+					else {
+						std::cout << "No existe \n";
+					}
+					
+				}
 			}
+			
 			applyForces(*it);
 			(*it)->integrate(t);
 			++it;
@@ -104,6 +123,7 @@ void SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeome
 	SolidosEstaticos* newsolidoEstatico = new SolidosEstaticos(gScene, geo, transform, material, color);
 	solidosEstaticos.push_back(newsolidoEstatico);
 	gScene->addActor(*newsolidoEstatico->getSolido());
+
 }
 void SolidosRSystem::createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics)
 {
