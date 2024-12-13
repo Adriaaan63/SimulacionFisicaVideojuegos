@@ -4,6 +4,7 @@
 #include "ExplosionForceGenerator.h"
 #include "ProjectileTrajectoryGenerator.h"
 #include "NormalGenerator.h"
+#include "GravityForceGenerator.h"
 #include "Scene.h"
 
 class ProjectileTrajectoryGenerator;

@@ -150,12 +150,12 @@ void initPhysics(bool interactive)
 #pragma region Proyecto
 	//------------------------------Proyecto----------------------------------------------
 	canUseCalbacks = false;
-	/*GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
+	GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
 	GetCamera()->scene = 2;
-	scene2 = new Scene2(gPhysics, gScene);*/
-	scene1 = new Scene1(gPhysics, gScene);
+	scene2 = new Scene2(gPhysics, gScene);
+	/*scene1 = new Scene1(gPhysics, gScene);
 	GetCamera()->scene = 1;
-	trajectoryGen = scene1->getTrayectGen();
+	trajectoryGen = scene1->getTrayectGen();*/
 	//------------------------------------------------------------------------------------
 #pragma endregion
 
@@ -171,12 +171,13 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 	
-	display_text = "Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos());
-	display_text1 = "Tiros: " + std::to_string(scene1->getSolidSys()->getTiros());
+	/*display_text = "Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos());
+	display_text1 = "Tiros: " + std::to_string(scene1->getSolidSys()->getTiros());*/
 
-	scene1->Update(t);
-	//scene2->Update(t);
-	canDrawTray = scene1->getCanDrawTray();
+	//scene1->Update(t);
+	//canDrawTray = scene1->getCanDrawTray();
+	scene2->Update(t);
+	
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -220,11 +221,11 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'P':
+	/*case 'P':
 		if(scene1->getSolidSys()->getTiros() > 0)
 			scene1->createProyectil();
 		
-		break;
+		break;*/
 	case 'W':
 		scene2->setPlayerPos(PxVec3(-2,0,0));
 		break;
@@ -269,7 +270,7 @@ void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 {
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
-	scene1->onCollision(actor1, actor2);
+	//scene1->onCollision(actor1, actor2);
 }
 
 

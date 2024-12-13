@@ -25,6 +25,6 @@ protected:
 	float density;
 	float _gravitity = 9.8f;
 
-	Particle* liquidParticle;
+	physx::PxVec3 liquidParticle;
 };
 

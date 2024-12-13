@@ -118,11 +118,13 @@ void SolidosRSystem::applyForces(SolidoRigido* p) {
 	if(totalForce.normalize() > 0)
 	p->getSolido()->addForce(totalForce,physx::PxForceMode::eFORCE);
 }
-SolidosEstaticos* SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
+SolidosEstaticos* SolidosRSystem::createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color, bool actor)
 {
 	SolidosEstaticos* newsolidoEstatico = new SolidosEstaticos(gScene, geo, transform, material, color);
 	solidosEstaticos.push_back(newsolidoEstatico);
-	gScene->addActor(*newsolidoEstatico->getSolido());
+
+	if(actor)
+		gScene->addActor(*newsolidoEstatico->getSolido());
 	return newsolidoEstatico;
 
 }
@@ -159,11 +161,11 @@ void SolidosRSystem::createScene(physx::PxScene* gScene, physx::PxPhysics* gPhys
 //	forceGenerators.push_back(f3);
 //	particles.push_back(p3);
 //}
-//void ParticleSystem::generateBuoyancyFG() {
-//	Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0,0,0 }, Vector4(1, 1, 1, 1), 60, { 0,0,0 }, 0.85, GeometryType::BOX, { 1,1,1 });
-//	/*Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0.0,0.0,0.0 }, Vector4(1, 1, 1, 1), 60.0f, { 0.0,0.0,0.0 }, 0.85);*/
-//	p4->setMass(75);
-//	f4 = new BuoyancyForceGenerator(1, 1, 1000.0, { -10.0,30.0,0.0 });
-//	forceGenerators.push_back(f4);
-//	particles.push_back(p4);
-//}
+void SolidosRSystem::generateBuoyancyFG() {
+	//SolidoRigido* p4 = new SolidoRigido(, &PxBoxGeometry(Vector3(5, 5, 5)), transform, PxVec3(0, 0, 0), PxVec3(0, 0, 0), 0.1f, material, color, (float)INT_MAX);;
+	/*Particle* p4 = new Particle({ -10.0,20.0,0.0 }, { 0.0,0.0,0.0 }, Vector4(1, 1, 1, 1), 60.0f, { 0.0,0.0,0.0 }, 0.85);*/
+	//p4->setMass();
+	f4 = new BuoyancyForceGenerator(1, 1, 1000.0, { 0.0,5.0,0.0 });
+	forceGenerators.push_back(f4);
+	//solidos.push_back(p4);
+}

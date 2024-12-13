@@ -26,7 +26,7 @@ SolidoRigido* PatosGenerator::generateSolidoRigido()
     // Generar posición aleatoria dentro de los límites del lago seleccionado
     physx::PxVec3 randomPos(
         Random(minBounds.x + 20, maxBounds.x - 20),
-        8,
+        0,
         Random(minBounds.z + 20, maxBounds.z - 20));
 
     //// Configurar material con propiedades aleatorias
@@ -46,7 +46,7 @@ SolidoRigido* PatosGenerator::generateSolidoRigido()
         physx::PxTransform(randomPos),
         physx::PxVec3(Random(-5.0f, 5.0f), Random(2.0f, 8.0f), Random(-5.0f, 5.0f)),
         physx::PxVec3(0, 0, 0),
-        Random(0.1f, 0.3f), material, { 1.0f, 1.0f, 0.0f, 1.0f }, INT_MAX);
+        Random(0.08, 0.1), material, { 1.0f, 1.0f, 0.0f, 1.0f }, INT_MAX);
 
     // Configurar el "pato" en la escena
     pato->setSolidoInScene(pato->getSolido());

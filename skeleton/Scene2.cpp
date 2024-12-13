@@ -31,15 +31,31 @@ void Scene2::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor
 void Scene2::createScene()
 {
 	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.5f); // Fricción y restitución
-	lago.push_back( solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(75, 3, 250), { -150,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1)));
-	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(75, 3, 250), { 150,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1)));
-	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(225, 3, 75), { 0,0,-250 }, material, Vector4(0.0f, 1.0f, 1.0f, 1)));
-	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(225, 3, 75), { 0,0,250 }, material, Vector4(0.0f, 1.0f, 1.0f, 1)));
+	lago.push_back( solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(75, 3, 250), { -150,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1),false));
+	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(75, 3, 250), { 150,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1),false));
+	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(225, 3, 75), { 0,0,-250 }, material, Vector4(0.0f, 1.0f, 1.0f, 1),false));
+	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(225, 3, 75), { 0,0,250 }, material, Vector4(0.0f, 1.0f, 1.0f, 1),false));
 	
 	cretePlayer(&PxBoxGeometry(Vector3(2, 2, 2)), PxTransform(0, 200, 0), material, { 0,0,0,1.0f });
 	solidSys->createGeneratorSolids(new PatosGenerator(PxVec3(0, 0, 0), 2000.0f, 2000.0f,10, gScene, lago));
 	//creteSuelo(gScene, &physx::PxBoxGeometry(5000, 100, 5000), { 0,-500,0 }, material, Vector4(0.63f, 0.6f, 0.38f, 1));
 	//solidSys->createScene(gScene, gPhysics);
+	solidSys->generateBuoyancyFG();
+
+	//physx::PxVec3 minCorner = Vector3(-250, -50, -175);
+	//physx::PxVec3 maxCorner = Vector3(-75, 50, 325);
+	solidSys->createForceGenerator(new WindGenerator(physx::PxVec3(0, 0, -10), 10, 0, Vector3(-250, -50, -225), Vector3(-75, 50, 325)));
+	solidSys->createForceGenerator(new WindGenerator(physx::PxVec3(10, 0, 0), 10, 0, Vector3(-250, -50, -325), Vector3(150, 50, -175)));
+	solidSys->createForceGenerator(new WindGenerator(physx::PxVec3(0, 0, 10), 10, 0, Vector3(75, -50, -325), Vector3(250, 50, 225)));
+	solidSys->createForceGenerator(new WindGenerator(physx::PxVec3(-10, 0, 0), 10, 0, Vector3(-150, -50, 175), Vector3(250, 50, 325)));
+	//minCorner = Vector3(-75, -50, 175);
+	//maxCorner = Vector3(250, 50, 325);
+	//// Calcula el centro de la caja y sus dimensiones
+	//physx::PxVec3 boxCenter = (minCorner + maxCorner) * 0.5f;
+	//physx::PxVec3 boxHalfExtents = (maxCorner - minCorner) * 0.5f;
+	//solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(boxHalfExtents.abs()), PxTransform(boxCenter), material, Vector4(0.0f, 1.0f, 1.0f, 1), false);
+
+
 }
 void Scene2::creteSuelo(physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
 {
@@ -88,7 +104,7 @@ void Scene2::Update(double t) {
 	else {
 		canDrawTray = true;
 	}*/
-	//parSys->update(t);
+	parSys->update(t);
 	solidSys->update(t);
 }
 

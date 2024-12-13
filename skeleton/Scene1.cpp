@@ -35,6 +35,7 @@ void Scene1::createScene()
 	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(25, 1000, 5000), { 0,-1000,0 }, material, Vector4(1.0f,0,0,1));
 	creteSuelo(gScene, &physx::PxBoxGeometry(5000, 100, 5000), { 0,-500,0 }, material, Vector4(0.63f, 0.6f, 0.38f, 1));
 	solidSys->createScene(gScene, gPhysics);
+	solidSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, -10, 0)));
 }
 void Scene1::creteSuelo(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
 {

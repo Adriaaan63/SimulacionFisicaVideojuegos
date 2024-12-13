@@ -37,8 +37,8 @@ public:
 		forceGenerators.push_back(g);
 	}
 	/*void generateSpringDemo();
-	void generateAnchorSpringDemo();
-	void generateBuoyancyFG();*/
+	void generateAnchorSpringDemo();*/
+	void generateBuoyancyFG();
 
 	std::list<SolidoRigido*> getListSolid() const { return solidos; };
 	void addSolido(SolidoRigido* p);
@@ -53,11 +53,11 @@ public:
 	/*void setKSpringFG(double newK) {
 		f3->setK(f3->getK() + newK);
 		std::cout << f3->getK() << std::endl;
-	}
-	BuoyancyForceGenerator* getFgFlot() const { return f4; };*/
+	}*/
+	BuoyancyForceGenerator* getFgFlot() const { return f4; };
 
 	SolidosEstaticos* createSolidoEstatico(physx::PxScene* gScene, physx::PxGeometry* geo,
-		physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
+		physx::PxTransform transform, physx::PxMaterial* material, Vector4 color, bool actor = true);
 	void createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics);
 
 	int getPuntos() const { return puntos; };
@@ -68,8 +68,8 @@ private:
 	bool activeExplosion;
 	int puntos = 0;
 	int tiros = 3;
-	/*AnchoredSpringFG* f3;
-	BuoyancyForceGenerator* f4;*/
+	/*AnchoredSpringFG* f3;*/
+	BuoyancyForceGenerator* f4;
 };
 
 

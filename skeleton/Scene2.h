@@ -7,6 +7,9 @@
 #include "Scene.h"
 #include "Player.h"
 #include "PatosGenerator.h"
+#include "BuoyancyForceGenerator.h"
+#include "GravityForceGenerator.h"
+#include "WindGenerator.h"
 
 class ProjectileTrajectoryGenerator;
 using namespace physx;
