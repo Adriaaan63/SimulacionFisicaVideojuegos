@@ -5,8 +5,8 @@
 
 class ProjectileTrajectoryGenerator : public ParticleGenerator {
 public:
-    ProjectileTrajectoryGenerator(physx::PxVec3 initialPos, physx::PxVec3 velocity, float timeStep, float maxTime, ParticleSystem* prSys)
-        : ParticleGenerator(initialPos, 0, 0), velocity(velocity), timeStep(timeStep), maxTime(maxTime), prSys(prSys) {
+    ProjectileTrajectoryGenerator(physx::PxVec3 initialPos, physx::PxVec3 velocity, float timeStep, float maxTime, ParticleSystem* prSys, physx::PxVec3 tam = {0.3,0.3,0.3}, int maxParticle = 30)
+        : ParticleGenerator(initialPos, 0, 0), velocity(velocity), timeStep(timeStep), maxTime(maxTime), prSys(prSys), tam(tam), maxParticles(maxParticle) {
     }
 
     ~ProjectileTrajectoryGenerator() {
@@ -53,4 +53,5 @@ private:
     ParticleSystem* prSys;
     std::vector<Particle*> particlesTrayec;
     int maxParticles = 30;
+    physx::PxVec3 tam;
 };

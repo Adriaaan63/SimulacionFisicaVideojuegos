@@ -1,7 +1,7 @@
 #include "SolidosRSystem.h"
 #include "ParticleSystem.h"
 
-SolidosRSystem::SolidosRSystem(int maxSolidos):Systems(), maxSolidos(maxSolidos), numSolidos(0) {
+SolidosRSystem::SolidosRSystem(int maxSolidos, int tiros):Systems(), maxSolidos(maxSolidos), numSolidos(0), tiros (tiros) {
 	activeExplosion = false;
 }
 SolidosRSystem::~SolidosRSystem() {
@@ -83,7 +83,8 @@ void SolidosRSystem::updateProyectiles(double t) {
 			++it;
 		}
 		else {
-			(*it)->getParticleGenerator()->setLife(false);
+			if ((*it)->getParticleGenerator() != nullptr)
+				(*it)->getParticleGenerator()->setLife(false);
 			auto aux = it;
 			++it;
 			delete* aux;

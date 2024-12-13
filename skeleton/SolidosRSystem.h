@@ -24,7 +24,7 @@ protected:
 	/*std::list<ParticleGenerator*> generators;
 	std::list<ForceGenerator*> forceGenerators;*/
 public:
-	SolidosRSystem(int maxSolidos);
+	SolidosRSystem(int maxSolidos, int tiros = 3);
 	~SolidosRSystem();
 
 	virtual void update(double t);
@@ -67,7 +67,7 @@ public:
 private:
 	bool activeExplosion;
 	int puntos = 0;
-	int tiros = 3;
+	int tiros;
 	/*AnchoredSpringFG* f3;*/
 	BuoyancyForceGenerator* f4;
 };

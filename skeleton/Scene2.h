@@ -23,12 +23,14 @@ public:
 	virtual void Update(double t);
 
 
-	/*void createProyectil();*/
+	void createProyectil();
 	SolidosRSystem* getSolidSys() const { return solidSys; };
 	Player* getPlayer() const { return player; };
 	void setPlayerPos(PxVec3 vec) {
 		player->getPlayer()->getSolido()->setGlobalPose(physx::PxTransform( player->getPlayer()->getSolido()->getGlobalPose().p + vec));
 	}
+	bool getCanDrawTray() const { return canDrawTray; }
+	ProjectileTrajectoryGenerator* getTrayectGen() const { return trajectoryGen; }
 private:
 	SolidosRSystem* solidSys;
 	ParticleSystem* parSys;
@@ -38,10 +40,14 @@ private:
 	void creteSuelo(physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
 
 	void cretePlayer(physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
+
+	void createTrayectoria();
 	
+	bool canDrawTray;
 	SolidosEstaticos* suelo;
 	Player* player;
 	std::vector<SolidosEstaticos*> lago;
+	ProjectileTrajectoryGenerator* trajectoryGen;
 
 
 };

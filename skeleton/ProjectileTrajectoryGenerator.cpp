@@ -11,7 +11,7 @@ void ProjectileTrajectoryGenerator::generateTrajectory()
         // Calcular posición futura
         physx::PxVec3 newPos = calculatePositionAtTime(t);
 
-        Particle* p = new Particle(newPos, physx::PxVec3(0, 0, 0), Vector4(1, 0, 0, 1), INT_MAX, physx::PxVec3(0, 0, 0), 0.9f, physx::PxGeometryType::Enum::eSPHERE, physx::PxVec3(0.3, 0.3, 0.3));
+        Particle* p = new Particle(newPos, physx::PxVec3(0, 0, 0), Vector4(1, 0, 0, 1), INT_MAX, physx::PxVec3(0, 0, 0), 0.9f, physx::PxGeometryType::Enum::eSPHERE, tam);
         prSys->addParticle(p);
         particlesTrayec.push_back(p);
         renderItems.push_back(p->getRenderItem());

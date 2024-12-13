@@ -221,11 +221,16 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	/*case 'P':
-		if(scene1->getSolidSys()->getTiros() > 0)
-			scene1->createProyectil();
-		
-		break;*/
+	case 'P':
+		if (GetCamera()->scene == 2) {
+			if (scene2->getSolidSys()->getTiros() > 0)
+				scene2->createProyectil();
+		}
+		else {
+			if (scene1->getSolidSys()->getTiros() > 0)
+				scene1->createProyectil();
+		}
+		break;
 	case 'W':
 		scene2->setPlayerPos(PxVec3(-2,0,0));
 		break;
@@ -271,6 +276,7 @@ void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
 	//scene1->onCollision(actor1, actor2);
+	scene2->onCollision(actor1, actor2);
 }
 
 
