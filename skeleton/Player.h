@@ -5,7 +5,9 @@ class Player
 public:
 	Player() {};
 	Player(SolidoRigido* solido);
-	~Player(){}
+	~Player(){
+		delete solido;
+	}
 	SolidoRigido* getPlayer() const { return solido; };
 	void update();
 private:

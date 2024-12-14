@@ -2,7 +2,6 @@
 #include "SolidosRSystem.h"
 #include "ParticleSystem.h"
 #include "ExplosionForceGenerator.h"
-#include "ProjectileTrajectoryGenerator.h"
 #include "NormalGenerator.h"
 #include "GravityForceGenerator.h"
 #include "Scene.h"
@@ -17,15 +16,14 @@ public:
 	~Scene1();
 	virtual void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2);
 	virtual void Update(double t);
-	
+	virtual void init(ProjectileTrajectoryGenerator*& trajectoryGen);
+
 	bool getCanDrawTray() const { return canDrawTray; }
 	ProjectileTrajectoryGenerator* getTrayectGen() const { return trajectoryGen; }
 
-	void createProyectil();
-	SolidosRSystem* getSolidSys() const { return solidSys; };
+	virtual void createProyectil();
+	bool getCambioScene2() const { return cambioScene2; }
 private:
-	SolidosRSystem* solidSys;
-	ParticleSystem* parSys;
 	ProjectileTrajectoryGenerator* trajectoryGen;
 
 	void createScene();
@@ -34,7 +32,7 @@ private:
 	
 	bool canDrawTray;
 	SolidosEstaticos* suelo;
-	
+	bool cambioScene2 = false;
 	
 };
 

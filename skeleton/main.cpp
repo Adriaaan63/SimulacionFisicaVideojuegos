@@ -56,8 +56,8 @@ RenderItem* obj3 = NULL;
 ProjectileTrajectoryGenerator* trajectoryGen;
 Scene1* scene1;
 Scene2* scene2;
-
-
+Scene* currentScene = nullptr;
+int sceneNumber = 1;
 bool canUseCalbacks;
 bool canDrawTray;
 // Initialize physics engine
@@ -150,19 +150,51 @@ void initPhysics(bool interactive)
 #pragma region Proyecto
 	//------------------------------Proyecto----------------------------------------------
 	canUseCalbacks = false;
-	GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
+	/*GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
 	GetCamera()->scene = 2;
-	scene2 = new Scene2(gPhysics, gScene);
+	scene2 = new Scene2(gPhysics, gScene);*/
 	/*scene1 = new Scene1(gPhysics, gScene);
 	GetCamera()->scene = 1;
 	trajectoryGen = scene1->getTrayectGen();*/
+
+	scene1 = new Scene1(gPhysics, gScene);
+	scene2 = new Scene2(gPhysics, gScene);
+	currentScene = scene1; // Start with Scene1 as active
+	currentScene->init(trajectoryGen);
+	GetCamera()->scene = 1;
 	//------------------------------------------------------------------------------------
 #pragma endregion
 
 	
 }
 	
+void switchScene()
+{
+	if ((sceneNumber == 1 && currentScene == scene1) || (sceneNumber == 2 && currentScene == scene2)) {
+		return; // Already in the requested scene
+	}
 
+	if (currentScene != nullptr) {
+		currentScene->cleanUp();
+	}
+
+	if (sceneNumber == 1) {
+		currentScene = scene1;
+		GetCamera()->scene = 1;
+		GetCamera()->setTransform(PxVec3(500.0f, 80.0f, 0.0f), PxVec3(-0.6f, 0.0f, 0.0f));
+	}
+	else if (sceneNumber == 2) {
+		canDrawTray = false;
+		currentScene = scene2;
+		GetCamera()->scene = 2;
+		GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
+	}
+
+	if (currentScene != nullptr) {
+		currentScene->init(trajectoryGen);
+	}
+	
+}
 
 // Function to configure what happens in each step of physics
 // interactive: true if the game is rendering, false if it offline
@@ -170,21 +202,24 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	
-	/*display_text = "Puntos: " + std::to_string(scene1->getSolidSys()->getPuntos());
-	display_text1 = "Tiros: " + std::to_string(scene1->getSolidSys()->getTiros());*/
-
-	//scene1->Update(t);
-	//canDrawTray = scene1->getCanDrawTray();
-	scene2->Update(t);
+	if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
+		sceneNumber = 2;
+		switchScene();
+		
+	}
+	else {
+		if (currentScene != nullptr) {
+			display_text = "Puntos: " + std::to_string(currentScene->getSolidSys()->getPuntos());
+			display_text1 = "Tiros: " + std::to_string(currentScene->getSolidSys()->getTiros());
+			currentScene->Update(t);
+			if (sceneNumber == 1)
+				canDrawTray = scene1->getCanDrawTray();
+		}
+	}
 	
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-	
-	
-	
-	
 }
 
 // Function to clean data
@@ -192,26 +227,25 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
-	delete scene1;
-	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
+
+	if (scene1 != nullptr) {
+		delete scene1;
+		scene1 = nullptr;
+	}
+
+	if (scene2 != nullptr) {
+		delete scene2;
+		scene2 = nullptr;
+	}
+
 	gScene->release();
 	gDispatcher->release();
-	// -----------------------------------------------------
-	gPhysics->release();	
+	gPhysics->release();
 	PxPvdTransport* transport = gPvd->getTransport();
 	gPvd->release();
 	transport->release();
-	
+
 	gFoundation->release();
-	
-	//if (particle != nullptr) {
-	//	delete particle;  // Esto también llama al destructor de Particle, que debe liberar el RenderItem.
-	//	particle = nullptr;
-	//}
-	/*for (auto& e : proyectiles) {
-		delete e;
-	}
-	proyectiles.clear();*/
 }
 
 // Function called when a key is pressed
@@ -219,53 +253,37 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	switch(toupper(key))
+	switch (toupper(key))
 	{
+	case '1':
+		sceneNumber = 1;
+		switchScene();
+		break;
+	case '2':
+		sceneNumber = 2;
+		switchScene();
+		break;
 	case 'P':
-		if (GetCamera()->scene == 2) {
-			if (scene2->getSolidSys()->getTiros() > 0)
-				scene2->createProyectil();
-		}
-		else {
-			if (scene1->getSolidSys()->getTiros() > 0)
-				scene1->createProyectil();
+		if (currentScene != nullptr && currentScene->getSolidSys()->getTiros() > 0) {
+			currentScene->createProyectil();
 		}
 		break;
 	case 'W':
-		scene2->setPlayerPos(PxVec3(-2,0,0));
+		if(sceneNumber == 2)
+			scene2->setPlayerPos(PxVec3(-2, 0, 0));
 		break;
 	case 'A':
-		scene2->setPlayerPos(PxVec3(0, 0, 2));
+		if (sceneNumber == 2)
+			scene2->setPlayerPos(PxVec3(0, 0, 2));
 		break;
 	case 'S':
-		scene2->setPlayerPos(PxVec3(2, 0, 0));
+		if (sceneNumber == 2)
+			scene2->setPlayerPos(PxVec3(2, 0, 0));
 		break;
 	case 'D':
-		scene2->setPlayerPos(PxVec3(0, 0, -2));
+		if (sceneNumber == 2)
+			scene2->setPlayerPos(PxVec3(0, 0, -2));
 		break;
-	/*case 'H':
-		ParticleSys->setExplosion(true);
-		ParticleSys->createForceGenerator(new ExplosionForceGenerator(physx::PxVec3(0,0,0), 150.0f, 1000000.0f, 1.0f));
-		break;*/
-	/*case 'E':
-		ParticleSys->setKSpringFG(50);
-		break;
-	case 'F':
-		ParticleSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, 10, 0), 2.0f));
-		break;
-	case 'M':
-		break;
-	case 'V':
-		if (ParticleSys->getFgFlot() != nullptr) {
-			ParticleSys->getFgFlot()->setVolume(0.1f);
-		}
-		break;
-	case 'B':
-		if (ParticleSys->getFgFlot() != nullptr) {
-			ParticleSys->getFgFlot()->setVolume(-0.1f);
-		}
-		break;*/
-
 	default:
 		break;
 	}
@@ -275,8 +293,10 @@ void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 {
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
-	//scene1->onCollision(actor1, actor2);
-	scene2->onCollision(actor1, actor2);
+
+	if (currentScene != nullptr) {
+		currentScene->onCollision(actor1, actor2);
+	}
 }
 
 

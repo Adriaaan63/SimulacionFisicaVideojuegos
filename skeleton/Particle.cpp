@@ -34,12 +34,15 @@ Particle::Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float ti
 	createRenderItem(_type, tam);
 
 }
-Particle::Particle(Particle&const p) {
+Particle::Particle(const Particle& p) {
 	*this = p;
+	
 }
 Particle::~Particle(){
-	if(renderItem != nullptr)
+	if (renderItem != nullptr) {
 		DeregisterRenderItem(renderItem);
+		renderItem = nullptr;
+	}
 
 }
 void Particle::createRenderItem(physx::PxGeometryType::Enum type, physx::PxVec3 tam) {

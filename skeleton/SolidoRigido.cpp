@@ -1,5 +1,5 @@
 #include "SolidoRigido.h"
-#include "ParticleGenerator.h"
+#include "NormalGenerator.h"
 SolidoRigido::SolidoRigido(physx::PxScene* sc, physx::PxGeometry* geo, 
     physx::PxTransform transform, physx::PxVec3 linVel, physx::PxVec3 angVel, 
     float mass, physx::PxMaterial* material, Vector4 color,float time) : Solidos(sc,geo,transform,material),
@@ -18,7 +18,7 @@ SolidoRigido::SolidoRigido(SolidoRigido& const p) {
 	*this = p;
 }
 SolidoRigido::SolidoRigido(PxScene* scene, PxGeometry* geometry, PxTransform pose, PxVec3 linVel, PxVec3 angVel,
-    float mass, PxMaterial* material, Vector4 color, ParticleGenerator* generator)
+    float mass, PxMaterial* material, Vector4 color, NormalGenerator* generator)
     : Solidos(scene, geometry, pose, material), particleGenerator(generator) {
     newSolid = gScene->getPhysics().createRigidDynamic(pose);
     newSolid->setLinearVelocity(linVel);

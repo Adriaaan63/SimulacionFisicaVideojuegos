@@ -4,14 +4,14 @@
 #include "PxPhysics.h"
 #include "geometry/PxGeometry.h"
 #include "Solidos.h"
-class ParticleGenerator;
+class NormalGenerator;
 using namespace physx;
 class SolidoRigido: public Solidos
 {
 private:
 	physx::PxRigidDynamic* newSolid;
 	float timeLife;
-	ParticleGenerator* particleGenerator = nullptr; // Generador asociado
+	NormalGenerator* particleGenerator = nullptr; // Generador asociado
 public:
 	SolidoRigido() {};
 	SolidoRigido(physx::PxScene* gScene,physx::PxGeometry* geo,physx::PxTransform transform,
@@ -24,7 +24,7 @@ public:
 		return *this;
 	}
 	SolidoRigido(PxScene* scene, PxGeometry* geometry, PxTransform pose, PxVec3 vel, PxVec3 acc,
-		float masa, PxMaterial* material, Vector4 color, ParticleGenerator* generator = nullptr);
+		float masa, PxMaterial* material, Vector4 color, NormalGenerator* generator = nullptr);
 
 	~SolidoRigido() {
 		newSolid->release();
@@ -46,7 +46,7 @@ public:
 	float getTimeLife() const { return timeLife; };
 	bool isAlive();
 	void integrate(double t);
-	ParticleGenerator* getParticleGenerator() { return particleGenerator; }
-	void setParticleGenerator(ParticleGenerator* generator) { particleGenerator = generator; }
+	NormalGenerator* getParticleGenerator() { return particleGenerator; }
+	void setParticleGenerator(NormalGenerator* generator) { particleGenerator = generator; }
 };
 

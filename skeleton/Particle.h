@@ -13,7 +13,7 @@ public:
 	Particle() {};
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel,Vector4 color, physx::PxVec3 Acc, double damping, float mass_, physx::PxVec3 force = { 0,0,0 });
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel,Vector4 color, float mass_, physx::PxVec3 acc = { 0,0,0 }, physx::PxVec3 force = { 0,0,0 });
-	Particle(Particle& const p);
+	Particle(const Particle& p);
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float time_, physx::PxVec3 Acc, double Damping, physx::PxVec3 force = { 0,0,0 });
 	Particle(physx::PxVec3 Pos, physx::PxVec3 Vel, Vector4 color, float time_, physx::PxVec3 Acc, double Damping, physx::PxGeometryType::Enum type, physx::PxVec3 tam = {1,1,1}, physx::PxVec3 force = {0,0,0});
 

@@ -2,15 +2,9 @@
 
 Scene1::Scene1(PxPhysics* gPhysics, PxScene* gScene):Scene(gPhysics, gScene), canDrawTray(true)
 {
-	parSys = new ParticleSystem();
-	solidSys = new SolidosRSystem(10);
-	createScene();
-	createTrayectoria();
 }
 Scene1::~Scene1()
 {
-	delete parSys;
-	delete solidSys;
 }
 void Scene1::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 {
@@ -39,7 +33,8 @@ void Scene1::createScene()
 }
 void Scene1::creteSuelo(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
 {
-	suelo = new SolidosEstaticos(gScene, geo, transform, material, color);
+	//suelo = new SolidosEstaticos(gScene, geo, transform, material, color);
+	suelo = solidSys->createSolidoEstatico(gScene, geo, transform, material, color);
 	gScene->addActor(*suelo->getSolido());
 }
 void Scene1::createTrayectoria() {
@@ -61,7 +56,7 @@ void Scene1::createProyectil() {
 	SolidoRigido* s = new SolidoRigido(gScene, &physx::PxSphereGeometry(8),
 		GetCamera()->getTransform(), GetCamera()->getDir() * 200,
 		{ 0, 0, 0 }, 0.2f, material, { 1,1,1,1 }, 5);
-	ParticleGenerator* generator = new NormalGenerator(s->getPose().p, s->getShape()->getGeometry().sphere().radius , 2, 10, 10, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2));
+	NormalGenerator* generator = new NormalGenerator(s->getPose().p, s->getShape()->getGeometry().sphere().radius , 2, 10, 10, physx::PxVec3(5, 5, 5), physx::PxVec3(2, 2, 2));
 	s->setParticleGenerator(generator);
 	solidSys->addProyecyiles(s);
 	parSys->createGenerator(generator, 0.01, { 0,0,1,1 });
@@ -78,6 +73,23 @@ void Scene1::Update(double t) {
 	else {
 		canDrawTray = true;
 	}
+	
 	parSys->update(t);
 	solidSys->update(t);
+	for (auto& s : solidSys->getListSolid()) {
+		std::cout << std::to_string(s->getSolido()->getLinearVelocity().normalize())<< std::endl;
+		if (s->getSolido()->getLinearVelocity().normalize() <= 0.1f) {
+			cambioScene2 = true;
+		}
+		else cambioScene2 = false;
+	}
+}
+
+void Scene1::init(ProjectileTrajectoryGenerator*& newTrajectoryGen)
+{
+	parSys = new ParticleSystem();
+	solidSys = new SolidosRSystem(10);
+	createScene();
+	createTrayectoria();
+	newTrajectoryGen = trajectoryGen;
 }

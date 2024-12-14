@@ -21,10 +21,14 @@ public:
 	~Scene2();
 	virtual void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2);
 	virtual void Update(double t);
-
-
-	void createProyectil();
-	SolidosRSystem* getSolidSys() const { return solidSys; };
+	virtual void init(ProjectileTrajectoryGenerator*& trajectoryGen);
+	virtual void cleanUp() {
+		Scene::cleanUp();
+		delete player;
+		lago.clear();
+	}
+	virtual void createProyectil();
+	
 	Player* getPlayer() const { return player; };
 	void setPlayerPos(PxVec3 vec) {
 		player->getPlayer()->getSolido()->setGlobalPose(physx::PxTransform( player->getPlayer()->getSolido()->getGlobalPose().p + vec));
@@ -32,8 +36,7 @@ public:
 	bool getCanDrawTray() const { return canDrawTray; }
 	ProjectileTrajectoryGenerator* getTrayectGen() const { return trajectoryGen; }
 private:
-	SolidosRSystem* solidSys;
-	ParticleSystem* parSys;
+	
 	
 
 	void createScene();

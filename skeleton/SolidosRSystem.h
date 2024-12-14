@@ -9,6 +9,7 @@
 #include "Systems.h"
 #include "Piramide.h"
 #include "ExplosionForceGenerator.h"
+#include "NormalGenerator.h"
 class ParticleSystem;
 
 class SolidosRSystem: public Systems
@@ -31,6 +32,8 @@ public:
 	void updateObjets(double t);
 	void updateProyectiles(double t);
 	void createGeneratorSolids(ParticleGenerator* g) {
+		Particle p = Particle(g->getPose(), physx::PxVec3(0, 0, 0), {1,1,1,1}, 1);
+		g->setModel(p);
 		generators.push_back(g);
 	}
 	void createForceGenerator(ForceGenerator* g) {

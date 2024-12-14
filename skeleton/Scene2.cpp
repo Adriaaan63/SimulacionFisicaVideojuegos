@@ -2,31 +2,47 @@
 
 Scene2::Scene2(PxPhysics* gPhysics, PxScene* gScene) :Scene(gPhysics, gScene)
 {
-	parSys = new ParticleSystem();
-	solidSys = new SolidosRSystem(10, 5);
-	createScene();
-	createTrayectoria();
+	
 }
 Scene2::~Scene2()
 {
-	delete parSys;
-	delete solidSys;
 }
 void Scene2::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2)
 {
+	// Verificar si ambos actores pertenecen a la lista de sólidos
+	bool actor1InList = false;
+	bool actor2InList = false;
+
+	for (auto& s : solidSys->getListSolid()) {
+		if (s->getSolido() == actor1) actor1InList = true;
+		if (s->getSolido() == actor2) actor2InList = true;
+	}
+
+	// Si ambos están en la lista, ignorar la colisión
+	if (actor1InList && actor2InList) {
+		return; // Salir del método y no procesar esta colisión
+	}
+
+	// Procesar colisiones con proyectiles
 	for (auto& p : solidSys->getProyectiles()) {
 		if (p->getSolido() == actor1 || p->getSolido() == actor2) {
 			p->setTimeLife(-1); // Eliminar proyectil
 		}
 	}
 
+	// Procesar colisiones con los sólidos restantes
 	for (auto& s : solidSys->getListSolid()) {
 		if (s->getSolido() == actor1 || s->getSolido() == actor2) {
-			if(actor1->getType() != PxActorType::eRIGID_STATIC && actor2->getType() != PxActorType::eRIGID_STATIC)
+			
+			if (actor1->getType() != PxActorType::eRIGID_STATIC &&
+				actor2->getType() != PxActorType::eRIGID_STATIC) {
 				s->setTimeLife(-1); // Eliminar sólido
+			}
+			
 		}
 	}
 }
+
 
 void Scene2::createScene()
 {
@@ -114,5 +130,14 @@ void Scene2::Update(double t) {
 
 	parSys->update(t);
 	solidSys->update(t);
+}
+
+void Scene2::init(ProjectileTrajectoryGenerator*& newTrajectoryGen)
+{
+	parSys = new ParticleSystem();
+	solidSys = new SolidosRSystem(10, 5);
+	createScene();
+	createTrayectoria();
+	newTrajectoryGen = trajectoryGen;
 }
 
