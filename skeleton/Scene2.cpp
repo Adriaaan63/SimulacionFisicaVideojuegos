@@ -60,6 +60,7 @@ void Scene2::createScene()
 	//Player
 	cretePlayer(&PxBoxGeometry(Vector3(2, 2, 2)), PxTransform(0, 200, 0), material, { 0,0,0,1.0f });
 	solidSys->createGeneratorSolids(new PatosGenerator(PxVec3(0, 0, 0), 2000.0f, 2000.0f,10, gScene, lago));
+	//Suelo
 	creteSuelo(&physx::PxBoxGeometry(1000, 100, 1000), { 0,-120,0 }, material, Vector4(0.59f, 0.29f, 0.15f, 1));
 	
 	//Muelle: flotacion
@@ -81,7 +82,7 @@ void Scene2::createScene()
 }
 void Scene2::creteSuelo(physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
 {
-	suelo = new SolidosEstaticos(gScene, geo, transform, material, color);
+	suelo = solidSys->createSolidoEstatico(gScene, geo, transform, material, color);
 	gScene->addActor(*suelo->getSolido());
 }
 void Scene2::cretePlayer(physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
@@ -129,11 +130,12 @@ void Scene2::Update(double t) {
 		// Generar nueva trayectoria
 		trajectoryGen->generateTrajectory();
 	}
+	
+	parSys->update(t);
+	solidSys->update(t);
 	if (solidSys->getTiros() <= 0) {
 		final = true;
 	}
-	parSys->update(t);
-	solidSys->update(t);
 }
 
 void Scene2::init(ProjectileTrajectoryGenerator*& newTrajectoryGen)

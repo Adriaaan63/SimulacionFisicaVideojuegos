@@ -60,6 +60,7 @@ Scene* currentScene = nullptr;
 int sceneNumber = 1;
 bool canUseCalbacks;
 bool canDrawTray;
+bool fin = false;
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -176,6 +177,7 @@ void switchScene()
 
 	if (currentScene != nullptr) {
 		currentScene->cleanUp();
+		currentScene = nullptr;
 	}
 
 	if (sceneNumber == 1) {
@@ -202,7 +204,6 @@ void switchScene()
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	
 	if (currentScene != nullptr) {
 		display_text = "Puntos: " + std::to_string(currentScene->getSolidSys()->getPuntos());
 		display_text1 = "Tiros: " + std::to_string(currentScene->getSolidSys()->getTiros());
@@ -210,18 +211,21 @@ void stepPhysics(bool interactive, double t)
 		if (sceneNumber == 1)
 			canDrawTray = scene1->getCanDrawTray();
 	}
-	
-	if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
-		if (scene2->getFinal()) {
-			sceneNumber = 3;
-			switchScene();
-		}
-		else {
+	if (!scene2->getFinal()) {
+		if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
 			sceneNumber = 2;
 			switchScene();
 		}
-
 	}
+	else {
+		
+		display_text = "--Para salir, pulsa ";
+		display_text1 = " tecla ESC--";
+		fin = true;
+		sceneNumber = 3;
+		switchScene();
+	}
+	
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -269,7 +273,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		switchScene();
 		break;
 	case 'P':
-		if (currentScene != nullptr && currentScene->getSolidSys()->getTiros() > 0 && currentScene->getSolidSys()->getProyectiles().size() < 1) {
+		if (currentScene != nullptr && currentScene->getSolidSys()->getTiros() > 0/* && currentScene->getSolidSys()->getProyectiles().size() < 1*/) {
 			currentScene->createProyectil();
 		}
 		break;
