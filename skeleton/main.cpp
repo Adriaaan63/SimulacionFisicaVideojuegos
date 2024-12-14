@@ -61,6 +61,7 @@ int sceneNumber = 1;
 bool canUseCalbacks;
 bool canDrawTray;
 bool fin = false;
+bool start = false;
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -76,7 +77,7 @@ void initPhysics(bool interactive)
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
-	PxShape* shape = CreateShape(PxSphereGeometry(1), gMaterial);
+	/*PxShape* shape = CreateShape(PxSphereGeometry(1), gMaterial);
 	obj = new RenderItem(shape, new PxTransform(0, 0, 0), Vector4(1, 1, 1, 1));
 	
 	float distanceEje = 15.0f;
@@ -90,7 +91,7 @@ void initPhysics(bool interactive)
 
 	Vector3D<float> ejeZ(0.0f, 0.0, distanceEje);
 	PxShape* shape3 = CreateShape(PxSphereGeometry(1), gMaterial);
-	obj3 = new RenderItem(shape3, new PxTransform(ejeZ.x, ejeZ.y, ejeZ.z), Vector4(0, 0, 1, 1));
+	obj3 = new RenderItem(shape3, new PxTransform(ejeZ.x, ejeZ.y, ejeZ.z), Vector4(0, 0, 1, 1));*/
 	
 	/*particle = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0,5,0), 0.99);*/
 	
@@ -160,9 +161,9 @@ void initPhysics(bool interactive)
 
 	scene1 = new Scene1(gPhysics, gScene);
 	scene2 = new Scene2(gPhysics, gScene);
-	currentScene = scene1; // Start with Scene1 as active
-	currentScene->init(trajectoryGen);
-	GetCamera()->scene = 1;
+	//currentScene = scene1; // Start with Scene1 as active
+	//currentScene->init(trajectoryGen);
+	//GetCamera()->scene = 1;
 	//------------------------------------------------------------------------------------
 #pragma endregion
 
@@ -204,26 +205,32 @@ void switchScene()
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	if (currentScene != nullptr) {
-		display_text = "Puntos: " + std::to_string(currentScene->getSolidSys()->getPuntos());
-		display_text1 = "Tiros: " + std::to_string(currentScene->getSolidSys()->getTiros());
-		currentScene->Update(t);
-		if (sceneNumber == 1)
-			canDrawTray = scene1->getCanDrawTray();
-	}
-	if (!scene2->getFinal()) {
-		if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
-			sceneNumber = 2;
+	if (start) {
+		if (currentScene != nullptr) {
+			display_text = "Puntos: " + std::to_string(currentScene->getSolidSys()->getPuntos());
+			display_text1 = "Tiros: " + std::to_string(currentScene->getSolidSys()->getTiros());
+			currentScene->Update(t);
+			if (sceneNumber == 1)
+				canDrawTray = scene1->getCanDrawTray();
+		}
+		if (!scene2->getFinal()) {
+			if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
+				sceneNumber = 2;
+				switchScene();
+			}
+		}
+		else {
+
+			display_text = "-------Para salir, pulsa la";
+			display_text1 = " tecla ESC-------";
+			fin = true;
+			sceneNumber = 3;
 			switchScene();
 		}
 	}
 	else {
-		
-		display_text = "--Para salir, pulsa ";
-		display_text1 = " tecla ESC--";
-		fin = true;
-		sceneNumber = 3;
-		switchScene();
+		display_text = "----Para empezar, pulsa la";
+		display_text1 = " tecla E----";
 	}
 	
 
@@ -273,7 +280,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		switchScene();
 		break;
 	case 'P':
-		if (currentScene != nullptr && currentScene->getSolidSys()->getTiros() > 0/* && currentScene->getSolidSys()->getProyectiles().size() < 1*/) {
+		if (currentScene != nullptr && currentScene->getSolidSys()->getTiros() > 0 && currentScene->getSolidSys()->getProyectiles().size() < 1) {
 			currentScene->createProyectil();
 		}
 		break;
@@ -292,6 +299,11 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'D':
 		if (sceneNumber == 2)
 			scene2->setPlayerPos(PxVec3(0, 0, -2));
+		break;
+	case 'E':
+		start = true;
+		sceneNumber = 1;
+		switchScene();
 		break;
 	default:
 		break;

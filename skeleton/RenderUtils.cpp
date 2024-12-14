@@ -166,7 +166,7 @@ void renderLoop()
 
 	setupDefaultWindow("Simulacion Fisica Videojuegos");
 	setupDefaultRenderState();
-	//glutFullScreen();
+	glutFullScreen();
 
 	glutIdleFunc(idleCallback);
 	glutDisplayFunc(renderCallback);
