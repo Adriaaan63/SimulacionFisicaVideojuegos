@@ -39,10 +39,10 @@ SolidoRigido* PatosGenerator::generateSolidoRigido()
     float restitution = 0; // Más rebote para "patos"
 
     physx::PxMaterial* material = sc->getPhysics().createMaterial(staticFriction, dynamicFriction, restitution);
-
+    int tam = Random(4, 6);
     // Crear la geometría y el sólido rígido (patos)
     SolidoRigido* pato = new SolidoRigido(sc,
-        &physx::PxBoxGeometry(4, 4, 4),
+        &physx::PxBoxGeometry(tam, tam, tam),
         physx::PxTransform(randomPos),
         physx::PxVec3(Random(-5.0f, 5.0f), Random(2.0f, 8.0f), Random(-5.0f, 5.0f)),
         physx::PxVec3(0, 0, 0),

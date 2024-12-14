@@ -35,6 +35,7 @@ public:
 	}
 	bool getCanDrawTray() const { return canDrawTray; }
 	ProjectileTrajectoryGenerator* getTrayectGen() const { return trajectoryGen; }
+	bool getFinal() const { return final; }
 private:
 	
 	
@@ -51,6 +52,7 @@ private:
 	Player* player;
 	std::vector<SolidosEstaticos*> lago;
 	ProjectileTrajectoryGenerator* trajectoryGen;
+	bool final= false;
 
 
 };

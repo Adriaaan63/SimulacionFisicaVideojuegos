@@ -26,12 +26,20 @@ void Scene1::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor
 void Scene1::createScene()
 {
 	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.5f); // Fricción y restitución
-	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(25, 1000, 5000), { 0,-1000,0 }, material, Vector4(1.0f,0,0,1));
-	creteSuelo(gScene, &physx::PxBoxGeometry(5000, 100, 5000), { 0,-500,0 }, material, Vector4(0.63f, 0.6f, 0.38f, 1));
+	//Mesa
+	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(25, 1000, 1000), { 0,-1000,0 }, material, Vector4(1.0f,0,0,1));
+	//Suelo
+	creteSuelo(&physx::PxBoxGeometry(5000, 100, 5000), { 0,-500,0 }, material, Vector4(0.63f, 0.6f, 0.38f, 1));
+	//Paredes
+	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(1000, 1200, 5), { -900,0,-1000 }, material, Vector4(0.59f, 0.29f, 0.0f, 1));
+	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(1000, 1200, 5), { -900,0,1000 }, material, Vector4(0.59f, 0.29f, 0.0f, 1));
+	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(5, 1200, 1000), { -1000,0,0 }, material, Vector4(0.83f, 0.6f, 0.38f, 1));
+	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(1000, 5, 1000), { 0,1200,0 }, material, Vector4(0.59f, 0.29f, 0.0f, 1));
+	//Piramide
 	solidSys->createScene(gScene, gPhysics);
 	solidSys->createForceGenerator(new GravityForceGenerator(physx::PxVec3(0, -10, 0)));
 }
-void Scene1::creteSuelo(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
+void Scene1::creteSuelo(physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color)
 {
 	//suelo = new SolidosEstaticos(gScene, geo, transform, material, color);
 	suelo = solidSys->createSolidoEstatico(gScene, geo, transform, material, color);
@@ -62,7 +70,6 @@ void Scene1::createProyectil() {
 	parSys->createGenerator(generator, 0.01, { 0,0,1,1 });
 
 	gScene->addActor(*s->getSolido());
-	solidSys->setTiros();
 }
 
 void Scene1::Update(double t) {
@@ -77,7 +84,7 @@ void Scene1::Update(double t) {
 	parSys->update(t);
 	solidSys->update(t);
 	for (auto& s : solidSys->getListSolid()) {
-		std::cout << std::to_string(s->getSolido()->getLinearVelocity().normalize())<< std::endl;
+		//std::cout << std::to_string(s->getSolido()->getLinearVelocity().normalize())<< std::endl;
 		if (s->getSolido()->getLinearVelocity().normalize() <= 0.1f) {
 			cambioScene2 = true;
 		}

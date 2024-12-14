@@ -83,6 +83,7 @@ void SolidosRSystem::updateProyectiles(double t) {
 			++it;
 		}
 		else {
+			setTiros();
 			if ((*it)->getParticleGenerator() != nullptr)
 				(*it)->getParticleGenerator()->setLife(false);
 			auto aux = it;
@@ -90,6 +91,7 @@ void SolidosRSystem::updateProyectiles(double t) {
 			delete* aux;
 			proyectiles.erase(aux);
 			numSolidos--;
+			
 		}
 	}
 }

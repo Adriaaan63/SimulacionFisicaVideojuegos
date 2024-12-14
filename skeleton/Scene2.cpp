@@ -47,6 +47,7 @@ void Scene2::onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor
 void Scene2::createScene()
 {
 	physx::PxMaterial* material = gPhysics->createMaterial(0.5f, 0.5f, 0.5f); // Fricción y restitución
+	//Lago
 	lago.push_back( solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(75, 3, 250), { -150,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1),false));
 	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(75, 3, 250), { 150,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1),false));
 	lago.push_back(solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(225, 3, 75), { 0,0,-250 }, material, Vector4(0.0f, 1.0f, 1.0f, 1),false));
@@ -56,13 +57,15 @@ void Scene2::createScene()
 	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(10, 10, 325), { 225,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1));
 	solidSys->createSolidoEstatico(gScene, &physx::PxBoxGeometry(10, 10, 325), { -225,0,0 }, material, Vector4(0.0f, 1.0f, 1.0f, 1));
 	
+	//Player
 	cretePlayer(&PxBoxGeometry(Vector3(2, 2, 2)), PxTransform(0, 200, 0), material, { 0,0,0,1.0f });
 	solidSys->createGeneratorSolids(new PatosGenerator(PxVec3(0, 0, 0), 2000.0f, 2000.0f,10, gScene, lago));
-	//creteSuelo(gScene, &physx::PxBoxGeometry(5000, 100, 5000), { 0,-500,0 }, material, Vector4(0.63f, 0.6f, 0.38f, 1));
+	creteSuelo(&physx::PxBoxGeometry(1000, 100, 1000), { 0,-120,0 }, material, Vector4(0.59f, 0.29f, 0.15f, 1));
 	
+	//Muelle: flotacion
 	solidSys->generateBuoyancyFG();
 
-	
+	//viento
 	solidSys->createForceGenerator(new WindGenerator(physx::PxVec3(0, 0, -10), 10, 0, Vector3(-250, -50, -300), Vector3(-75, 50, 325)));
 	solidSys->createForceGenerator(new WindGenerator(physx::PxVec3(10, 0, 0), 10, 0, Vector3(-250, -50, -325), Vector3(200, 50, -175)));
 	solidSys->createForceGenerator(new WindGenerator(physx::PxVec3(0, 0, 10), 10, 0, Vector3(75, -50, -300), Vector3(250, 50, 325)));
@@ -111,7 +114,6 @@ void Scene2::createProyectil() {
 	//parSys->createGenerator(generator, 0.01, { 0,0,1,1 });
 
 	gScene->addActor(*s->getSolido());
-	solidSys->setTiros();
 }
 
 void Scene2::Update(double t) {
@@ -127,7 +129,9 @@ void Scene2::Update(double t) {
 		// Generar nueva trayectoria
 		trajectoryGen->generateTrajectory();
 	}
-
+	if (solidSys->getTiros() <= 0) {
+		final = true;
+	}
 	parSys->update(t);
 	solidSys->update(t);
 }

@@ -27,7 +27,7 @@ private:
 	ProjectileTrajectoryGenerator* trajectoryGen;
 
 	void createScene();
-	void creteSuelo(physx::PxScene* gScene, physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
+	void creteSuelo(physx::PxGeometry* geo, physx::PxTransform transform, physx::PxMaterial* material, Vector4 color);
 	void createTrayectoria();
 	
 	bool canDrawTray;

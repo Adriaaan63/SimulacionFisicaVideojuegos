@@ -190,7 +190,7 @@ void switchScene()
 		GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
 	}
 
-	if (currentScene != nullptr) {
+	if (currentScene != nullptr && sceneNumber != 3) {
 		currentScene->init(trajectoryGen);
 	}
 	
@@ -202,21 +202,26 @@ void switchScene()
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
-		sceneNumber = 2;
-		switchScene();
-		
-	}
-	else {
-		if (currentScene != nullptr) {
-			display_text = "Puntos: " + std::to_string(currentScene->getSolidSys()->getPuntos());
-			display_text1 = "Tiros: " + std::to_string(currentScene->getSolidSys()->getTiros());
-			currentScene->Update(t);
-			if (sceneNumber == 1)
-				canDrawTray = scene1->getCanDrawTray();
-		}
+	
+	if (currentScene != nullptr) {
+		display_text = "Puntos: " + std::to_string(currentScene->getSolidSys()->getPuntos());
+		display_text1 = "Tiros: " + std::to_string(currentScene->getSolidSys()->getTiros());
+		currentScene->Update(t);
+		if (sceneNumber == 1)
+			canDrawTray = scene1->getCanDrawTray();
 	}
 	
+	if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
+		if (scene2->getFinal()) {
+			sceneNumber = 3;
+			switchScene();
+		}
+		else {
+			sceneNumber = 2;
+			switchScene();
+		}
+
+	}
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -264,7 +269,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		switchScene();
 		break;
 	case 'P':
-		if (currentScene != nullptr && currentScene->getSolidSys()->getTiros() > 0) {
+		if (currentScene != nullptr && currentScene->getSolidSys()->getTiros() > 0 && currentScene->getSolidSys()->getProyectiles().size() < 1) {
 			currentScene->createProyectil();
 		}
 		break;
