@@ -2,8 +2,8 @@
 #include "NormalGenerator.h"
 SolidoRigido::SolidoRigido(physx::PxScene* sc, physx::PxGeometry* geo, 
     physx::PxTransform transform, physx::PxVec3 linVel, physx::PxVec3 angVel, 
-    float mass, physx::PxMaterial* material, Vector4 color,float time) : Solidos(sc,geo,transform,material),
- timeLife(time)
+    float mass, physx::PxMaterial* material, Vector4 color,float time, int puntos) : Solidos(sc,geo,transform,material),
+ timeLife(time), puntos(puntos)
 {
 	newSolid = gScene->getPhysics().createRigidDynamic(transform);
 	newSolid->setLinearVelocity(linVel);

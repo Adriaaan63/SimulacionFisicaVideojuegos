@@ -29,5 +29,6 @@ public:
 	void setSolidoInScene(physx::PxRigidBody* newSolid) {
 		gScene->addActor(*newSolid);
 	};
+	RenderItem* getRenderItem() const { return renderItem; };
 };
 

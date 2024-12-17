@@ -21,7 +21,7 @@ public:
 	~Scene2();
 	virtual void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2);
 	virtual void Update(double t);
-	virtual void init(ProjectileTrajectoryGenerator*& trajectoryGen);
+	virtual void init(ProjectileTrajectoryGenerator*& trajectoryGen, int puntosTotales);
 	virtual void cleanUp() {
 		Scene::cleanUp();
 		delete player;

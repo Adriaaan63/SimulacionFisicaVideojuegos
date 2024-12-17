@@ -62,6 +62,7 @@ bool canUseCalbacks;
 bool canDrawTray;
 bool fin = false;
 bool start = false;
+int puntosTotales = 0;
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -177,6 +178,7 @@ void switchScene()
 	}
 
 	if (currentScene != nullptr) {
+		puntosTotales = currentScene->getSolidSys()->getPuntos();
 		currentScene->cleanUp();
 		currentScene = nullptr;
 	}
@@ -194,7 +196,7 @@ void switchScene()
 	}
 
 	if (currentScene != nullptr && sceneNumber != 3) {
-		currentScene->init(trajectoryGen);
+		currentScene->init(trajectoryGen, puntosTotales);
 	}
 	
 }

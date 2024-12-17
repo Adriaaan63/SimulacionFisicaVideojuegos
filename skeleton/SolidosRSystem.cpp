@@ -52,12 +52,16 @@ void SolidosRSystem::updateObjets(double t) {
 			++it;
 		}
 		else {
+			if ((*it)->getPuntos() != 0) {
+				puntos += (*it)->getPuntos();
+			}
 			auto aux = it;
 			++it;
 			delete* aux;
 			solidos.erase(aux);
 			numSolidos--;
-			puntos += 100;
+			
+			
 		}
 	}
 }

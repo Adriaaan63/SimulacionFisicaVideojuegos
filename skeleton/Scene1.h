@@ -16,7 +16,7 @@ public:
 	~Scene1();
 	virtual void onCollision(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2);
 	virtual void Update(double t);
-	virtual void init(ProjectileTrajectoryGenerator*& trajectoryGen);
+	virtual void init(ProjectileTrajectoryGenerator*& trajectoryGen, int puntosTotales);
 
 	bool getCanDrawTray() const { return canDrawTray; }
 	ProjectileTrajectoryGenerator* getTrayectGen() const { return trajectoryGen; }

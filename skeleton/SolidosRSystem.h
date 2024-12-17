@@ -64,6 +64,7 @@ public:
 	void createScene(physx::PxScene* gScene, physx::PxPhysics* gPhysics);
 
 	int getPuntos() const { return puntos; };
+	void setPuntos(int pnt) { puntos = pnt; };
 	int getTiros() const { return tiros; };
 	void setTiros() { 
 		tiros-=1; };

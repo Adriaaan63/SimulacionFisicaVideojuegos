@@ -46,10 +46,27 @@ SolidoRigido* PatosGenerator::generateSolidoRigido()
         physx::PxTransform(randomPos),
         physx::PxVec3(Random(-5.0f, 5.0f), Random(2.0f, 8.0f), Random(-5.0f, 5.0f)),
         physx::PxVec3(0, 0, 0),
-        Random(0.08, 0.1), material, { 1.0f, 1.0f, 0.0f, 1.0f }, INT_MAX);
+        Random(0.07, 0.1), material, { 1.0f, 1.0f, 0.0f, 1.0f }, INT_MAX);
 
+    typeOfPatos(pato);
     // Configurar el "pato" en la escena
     pato->setSolidoInScene(pato->getSolido());
 
     return pato;
+}
+
+void PatosGenerator::typeOfPatos(SolidoRigido* pato)
+{
+    float mass = pato->getSolido()->getMass();
+    if (mass >= 0.08 && mass < 0.09) {
+        pato->getRenderItem()->color = { 0.0f, 0.0f,1.0f,1.0f };
+        pato->setPuntos(50);
+    }
+    else if (mass >= 0.09 && mass <= 0.1) {
+        pato->getRenderItem()->color = { 1.0f, 0.0f,0.0f,1.0f };
+        pato->setPuntos(100);
+    }
+    else {
+        pato->setPuntos(20);
+    }
 }

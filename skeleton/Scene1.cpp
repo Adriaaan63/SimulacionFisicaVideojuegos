@@ -92,7 +92,7 @@ void Scene1::Update(double t) {
 	}
 }
 
-void Scene1::init(ProjectileTrajectoryGenerator*& newTrajectoryGen)
+void Scene1::init(ProjectileTrajectoryGenerator*& newTrajectoryGen, int puntosTotales)
 {
 	parSys = new ParticleSystem();
 	solidSys = new SolidosRSystem(10);

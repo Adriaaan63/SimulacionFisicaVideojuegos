@@ -12,10 +12,11 @@ private:
 	physx::PxRigidDynamic* newSolid;
 	float timeLife;
 	NormalGenerator* particleGenerator = nullptr; // Generador asociado
+	int puntos;
 public:
 	SolidoRigido() {};
 	SolidoRigido(physx::PxScene* gScene,physx::PxGeometry* geo,physx::PxTransform transform,
-		physx::PxVec3 linVel, physx::PxVec3 angVel, float mass, physx::PxMaterial* material, Vector4 color, float time = 20);
+		physx::PxVec3 linVel, physx::PxVec3 angVel, float mass, physx::PxMaterial* material, Vector4 color, float time = 20, int puntos = 0);
 	SolidoRigido(SolidoRigido& const s);
 	SolidoRigido& operator=(const SolidoRigido& p) {
 		newSolid = p.newSolid;
@@ -48,5 +49,10 @@ public:
 	void integrate(double t);
 	NormalGenerator* getParticleGenerator() { return particleGenerator; }
 	void setParticleGenerator(NormalGenerator* generator) { particleGenerator = generator; }
+	void setColorRender(Vector4 color) {
+		renderItem->color = color;
+	}
+	void setPuntos(int newPuntos) { puntos = newPuntos; };
+	int getPuntos() const { return puntos; };
 };
 

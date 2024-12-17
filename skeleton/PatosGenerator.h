@@ -12,6 +12,7 @@ public:
 	PatosGenerator(physx::PxVec3 pos, float posMax, float posMin, int maxPatos, physx::PxScene* sc, const std::vector<SolidosEstaticos*>& lagos);
 	Particle* generateParticle() override;
 	SolidoRigido* generateSolidoRigido() override;
+	void typeOfPatos(SolidoRigido* pato);
 
 };
 
