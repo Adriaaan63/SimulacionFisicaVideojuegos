@@ -7,7 +7,10 @@ ParticleGenerator::~ParticleGenerator(){
     particulasGenerador.clear();
 }
 void ParticleGenerator::update(double t, ParticleSystem* prSys) {
-	prSys->addParticle(generateParticle());
+    Particle* p = generateParticle();
+    if (p != nullptr) {
+        prSys->addParticle(p);
+    }
     cleanUpParticles();
 
 }

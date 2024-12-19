@@ -49,6 +49,7 @@
 
 extern std::string display_text;
 extern std::string display_text1;
+extern std::string display_text2;
 
 namespace Snippets
 {

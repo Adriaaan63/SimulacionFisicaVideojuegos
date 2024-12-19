@@ -25,9 +25,11 @@
 #include "ProjectileTrajectoryGenerator.h"
 #include "Scene1.h"
 #include "Scene2.h"
+#include "Scene3.h"
 
 std::string display_text = "This is a test";
 std::string display_text1 = "This is a test";
+std::string display_text2 = "";
 
 
 using namespace physx;
@@ -56,6 +58,7 @@ RenderItem* obj3 = NULL;
 ProjectileTrajectoryGenerator* trajectoryGen;
 Scene1* scene1;
 Scene2* scene2;
+Scene3* scene3;
 Scene* currentScene = nullptr;
 int sceneNumber = 1;
 bool canUseCalbacks;
@@ -63,6 +66,9 @@ bool canDrawTray;
 bool fin = false;
 bool start = false;
 int puntosTotales = 0;
+int puntoParaGanar = 2300;
+double timeStop = 0;
+double timetoPass = 1.3;
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -162,6 +168,7 @@ void initPhysics(bool interactive)
 
 	scene1 = new Scene1(gPhysics, gScene);
 	scene2 = new Scene2(gPhysics, gScene);
+	scene3 = new Scene3(gPhysics, gScene);
 	//currentScene = scene1; // Start with Scene1 as active
 	//currentScene->init(trajectoryGen);
 	//GetCamera()->scene = 1;
@@ -173,7 +180,8 @@ void initPhysics(bool interactive)
 	
 void switchScene()
 {
-	if ((sceneNumber == 1 && currentScene == scene1) || (sceneNumber == 2 && currentScene == scene2)) {
+	if ((sceneNumber == 1 && currentScene == scene1) || (sceneNumber == 2 && currentScene == scene2) ||
+		(sceneNumber == 3 && currentScene == scene3)) {
 		return; // Already in the requested scene
 	}
 
@@ -181,6 +189,7 @@ void switchScene()
 		puntosTotales = currentScene->getSolidSys()->getPuntos();
 		currentScene->cleanUp();
 		currentScene = nullptr;
+		timeStop = 0;
 	}
 
 	if (sceneNumber == 1) {
@@ -194,8 +203,11 @@ void switchScene()
 		GetCamera()->scene = 2;
 		GetCamera()->setTransform(PxVec3(500.0f, 300.0f, 0.0f), PxVec3(-0.6f, -0.3f, 0.0f));
 	}
+	else if (sceneNumber == 3) {
+		currentScene = scene3;
+	}
 
-	if (currentScene != nullptr && sceneNumber != 3) {
+	if (currentScene != nullptr) {
 		currentScene->init(trajectoryGen, puntosTotales);
 	}
 	
@@ -208,31 +220,53 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 	if (start) {
-		if (currentScene != nullptr) {
+		if (sceneNumber <= 2 && !fin) {
 			display_text = "Puntos: " + std::to_string(currentScene->getSolidSys()->getPuntos());
 			display_text1 = "Tiros: " + std::to_string(currentScene->getSolidSys()->getTiros());
+			display_text2 = " ";
 			currentScene->Update(t);
 			if (sceneNumber == 1)
 				canDrawTray = scene1->getCanDrawTray();
 		}
+		else {
+			display_text = "-------Para salir, pulsa la";
+			display_text1 = " tecla ESC-------";
+			if (puntosTotales >= puntoParaGanar) {
+				display_text2 = "HAS GANADO";
+				currentScene->Update(t);
+			}
+			else
+			{
+				display_text2 = "HAS PERDIDO";
+			}
+		}
 		if (!scene2->getFinal()) {
 			if (scene1->getCambioScene2() && currentScene->getSolidSys()->getTiros() <= 0) {
-				sceneNumber = 2;
-				switchScene();
+				timeStop += t;
+				if (timeStop >= timetoPass) {
+					sceneNumber = 2;
+					switchScene();
+				}
+				
 			}
 		}
 		else {
-
-			display_text = "-------Para salir, pulsa la";
-			display_text1 = " tecla ESC-------";
-			fin = true;
-			sceneNumber = 3;
-			switchScene();
+			if (!fin) {
+				fin = true;
+				
+				if (currentScene->getSolidSys() != nullptr) {
+					puntosTotales = currentScene->getSolidSys()->getPuntos();
+				}
+				sceneNumber = 3;
+				switchScene();
+				
+			}
 		}
 	}
 	else {
 		display_text = "----Para empezar, pulsa la";
 		display_text1 = " tecla E----";
+		
 	}
 	
 

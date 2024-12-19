@@ -73,6 +73,7 @@ public:
 		
 		return *this;
 	}
+	void setTam(physx::PxVec3 tamNew) { tam = tamNew; };
 protected:
 	physx::PxGeometryType::Enum _type = physx::PxGeometryType::Enum::eSPHERE;
 	physx::PxVec3 vel;

@@ -37,6 +37,8 @@
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PatosGenerator.cpp" />
+    <ClCompile Include="FireWorkGenerator.cpp" />
+    <ClCompile Include="Scene3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -76,6 +78,8 @@
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PatosGenerator.h" />
+    <ClInclude Include="FireWorkGenerator.h" />
+    <ClInclude Include="Scene3.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
